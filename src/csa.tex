@@ -7,6 +7,7 @@
 % decode bv->psi +
 % decode psi->sa +
 % final structure +
+% search sa
 % complexity +
 
 Перейдем к описанию реализации CSA. Как было упомянуто в обзоре литературы, для начала необходимо
@@ -110,4 +111,149 @@ type Csa struct {
 Кроме того, исходный текст все так же остается в первоначальном виде.
 
 Таким образом, для хранения сжатого индекса требуется $n \cdot \log |\sigma| + o(n)$,
-где $|\sigma|$ -- размер алфавита. Суммарно для поиска элемента требуется $O(n\cdot \log n)$ операций.
+где $|\sigma|$ -- размер алфавита. При двоичном поиске по suffix array необходимо произвести $O(\log n)$ операций.
+Для получения индекса в suffix array из $\psi$-массива требуется осуществить $O(n)$ операций.
+Суммарно для поиска элемента требуется $O(n\cdot \log n)$ операций.
+
+\textbf{Тестирование CSA}
+
+Рассмотрим эффективность работы CSA на примере пяти текстов различного содержания.
+Для начала оценим время построения массива и требуемое количество памяти для его хранения.
+В таблице \ref{table:6} указаны данные для Amazon Text Corpora.
+
+% csa_len = [879, 782, 684, 586, 498, 391, 293, 196, 98, 49, 10, 5, 2] # amazon
+% csa_time = [392.040, 299.721, 225.818, 165.427, 114.660, 73.818, 41.825, 18.803, 4.981, 1.431, 0.313, 0.269, 0.256] # amazon
+% csa_mem = [2281, 2036, 1816, 1573, 1336, 1082, 817, 561, 309, 163, 45, 26, 17] # amazon
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{3}{|c|}{Amazon} \\
+		\hline
+		Размер текста, KB & Память, MB & Время, s\\
+		\hline
+		879 & 2281 & 392.040\\
+		\hline
+		782 & 2036 & 299.721\\
+		\hline
+		684 & 1816 & 225.818\\
+		\hline
+		586 & 1573 & 165.427\\
+		\hline
+		489 & 1336 & 114.660\\
+		\hline
+		391 & 1082 & 73.818\\
+		\hline
+		293 & 817 & 41.825\\
+		\hline
+		196 & 561 & 18.803\\
+		\hline
+		98 & 309 & 4.981\\
+		\hline
+		49 & 163 & 1.431\\
+		\hline
+		10 & 45 & 0.313\\
+		\hline
+		5 & 26 & 0.269\\
+		\hline
+		2 & 17 & 0.256\\
+		\hline
+	\end{tabular}
+	\caption{Построение CSA}
+	\label{table:6}
+\end{table}
+
+% csa_len = [977, 879, 782, 684, 586, 489, 391, 293, 196, 98, 49, 10, 5, 2] # dna
+% csa_time = [491.614, 385.973, 309.387, 232.106, 168.735, 116.836, 73.656, 42.861, 18.788, 4.922, 1.446, 0.304, 0.267, 0.255] # dna
+
+%\begin{table}[h!]
+%	\centering
+%	\begin{tabular}{|c|c|c|}
+%		\hline
+%		\multicolumn{3}{|c|}{DNA} \\
+%		\hline
+%		Размер текста, KB & Память, MB & Время, s\\
+%		\hline
+%		977 & 2011 & 491.614\\
+%		\hline
+%		879 & 1782 & 285.973\\
+%		\hline
+%		782 & 1547 & 309.387\\
+%		\hline
+%		684 & 1396 & 232.106\\
+%		\hline
+%		586 & 1228 & 168.735\\
+%		\hline
+%		489 & 1077 & 116.836\\
+%		\hline
+%		391 & 845 & 73.656\\
+%		\hline
+%		293 & 627 & 42.861\\
+%		\hline
+%		196 & 436 & 18.788\\
+%		\hline
+%		98 & 241 & 4.922\\
+%		\hline
+%		49 & 124 & 1.446\\
+%		\hline
+%		10 & 34 & 0.304\\
+%		\hline
+%		5 & 23 & 0.267\\
+%		\hline
+%		2 & 16 & 0.255\\
+%		\hline
+%	\end{tabular}
+%	\caption{Построение CSA}
+%	\label{table:7}
+%\end{table}
+
+\begin{figure}[h!]
+	\includegraphics[width=12cm]{construct_time_amazon}
+	\caption{Построение CSA}
+	\centering
+	\label{fig:CSA_construct_time_amazon}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{construct_time_DNA}
+		\caption{$y=x$}
+		\label{fig:y equals x}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{construct_time_Proteins}
+		\caption{$y=3sinx$}
+		\label{fig:three sin x}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{construct_time_English}
+		\caption{$y=3sinx$}
+		\label{fig:three sin x}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{construct_time_Pitches}
+		\caption{$y=3sinx$}
+		\label{fig:three sin x}
+	\end{subfigure}
+	\caption{Построение CSA}
+	\label{fig:three graphs}
+\end{figure}
+
+\newpage
+Рассмотрим результаты зависимость скорости поиска подстроки от размера текста для CSA в Amazon Text Corpora.\\
+
+\begin{figure}[h!]
+	\includegraphics[width=12cm]{Lookup_time_csa_amazon}
+	\caption{Поиск подстроки в CSA}
+	\centering
+	\label{fig:CSA_Lookup_time_csa_amazon}
+\end{figure}
