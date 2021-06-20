@@ -1,0 +1,105 @@
+Реализация radix tree на языке Go взята из следующего источника: radix.
+%https://pkg.go.dev/github.com/armon/go-radix.
+Во многом выбор обусловлен удобством встраивания бенчмарка в существующую систему тестирования на языке Go.
+При этом с алгоритмической точки зрения эта реализация подтверждает
+теоретическое описание сложности поиска подстроки за $O(1)$.
+\newpage
+\begin{lstlisting}[caption=Radix tree example]
+func BenchmarkConstruct(b *testing.B, testStr string) {
+	var substringArray []string = createSubstrings(testStr)
+	b.ResetTimer()
+	r := radix.New()
+	for i := 0; i < b.n; i++ {
+		fillRadixTree(b.N, r, substringArray)
+	}
+}
+\end{lstlisting}
+
+На приведенном листинге 2 в кратком виде показана функция построения radix tree.
+В начале генерируется набор подстрок из текста, прочитанного из файла. В функции $fillRadixTree$
+происходит добавление подстрок в дерево. Сравнительные характеристики построения radix tree
+для Amazon Text Corpora приведены в таблице \ref{table:4}.
+
+% size, kB: 196, 148, 98, 79, 49, 10, 5, 2
+% time, s:  276.419, 128.494, 57.319, 36.786, 14.632, 0.845, 0.414, 0.284
+% mem, KB:  20248160, 11501051, 5192071, 3353864, 1324283, 52803, 13528, 2314
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Размер текста, KB & Память, MB & Время, s\\
+        \hline
+        196 & 20248 & 276.419\\
+        \hline
+        148 & 11501 & 128.494\\
+        \hline
+        98 & 5192 & 57.319\\
+        \hline
+        79 & 3353 & 36.786\\
+        \hline
+        49 & 1324 & 14.632\\
+        \hline
+        10 & 52 & 0.845\\
+        \hline
+        5 & 13 & 0.414\\
+        \hline
+        2 & 2 & 0.284\\
+        \hline
+    \end{tabular}
+    \caption{Построение radix tree}
+    \label{table:4}
+\end{table}
+
+Ниже в листинге 3 приведен упрощенный пример функции поиска подстроки в дереве.
+Построенная структура показывает очень хороший результат поиска подстроки за константное время.
+Его можно видеть в таблице \ref{table:5}.
+
+\newpage
+\begin{lstlisting}[caption=Radix tree lookup]
+func getSubstring(r *radix.Tree,
+                  subString string, testStr string) {
+	var out interface{}
+	var pos interface{}
+	// there is only one possible match for a string
+	fn := func(s string, v interface{}) bool {
+		out, pos = s, v
+		return false
+	}
+	r.WalkPrefix(subString, fn)
+	return out.(string), pos
+}
+\end{lstlisting}
+
+% size, kB: 20, 50, 60, 70, 80, 90, 100, 120, 150
+% time, ns: 220, 242, 243, 237, 243, 244, 243, 245, 256
+% mem, KB:  212243, 1334534, 1918371, 2595544, 3370035, 4237366, 5210522, 7449706, 11529887
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Размер текста, KB & Память, MB & Время, s\\
+        \hline
+        150 & 11529 & 256\\
+        \hline
+        120 & 7449 & 245\\
+        \hline
+        100 & 5210 & 243\\
+        \hline
+        90 & 4237 & 244\\
+        \hline
+        80 & 3370 & 243\\
+        \hline
+        70 & 2595 & 237\\
+        \hline
+        60 & 1918 & 243\\
+        \hline
+        50 & 1334 & 242\\
+        \hline
+        20 & 212 & 220\\
+        \hline
+    \end{tabular}
+    \caption{Поиск подстроки в radix tree}
+    \label{table:5}
+\end{table}
