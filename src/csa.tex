@@ -48,9 +48,9 @@ func ConstructPsi() {
 
 \textbf{Вспомогательные структуры данных}
 
-Для хранения данных используется битмап (bitmap) из пакета\\ Roaring.bitmap \cite{bitmap2021roaring}.
+Для хранения данных используется битмап (bitmap) из пакета\\ Roaring.bitmap \cite{chambi2016better}.
 Это быстрая и эффективная реализация битмапа. Также Roaring используется во многих продуктах,
-таких как Apache Druid, LinkedIn Pinot, Google Procella и т.д. \cite{bitmap2021daniel}.
+таких как Apache Druid, LinkedIn Pinot, Google Procella и т.д.
 
 Полученный $\psi$-массив представляет собой набор монотонно неубывающих последовательностей чисел.
 Алгоритм Elias-Fano позволяет преобразовывать каждую такую последовательность в битвектор в отдельности.
