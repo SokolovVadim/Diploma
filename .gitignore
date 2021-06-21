@@ -278,3 +278,7 @@ TSWLatexianTemp*
 # Images
 *.png
 *.jpg
+
+# Styles
+*.sty
+*.bst
