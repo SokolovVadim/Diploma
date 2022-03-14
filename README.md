@@ -16,6 +16,8 @@ texlive-lang-cyrillic
 ## build
 
 ```bash
+cd English
+make tex
 make bib
 make tex
 ```
