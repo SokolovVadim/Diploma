@@ -4,6 +4,15 @@
 % pattern matching is used in it
 % so it is crusial to work with substrings
 
+Text data processing is used in a wide range of tasks in the modern computer industry.
+Dealing with text data inverted index \cite{zobel2006inverted} is commonly used. This data structure
+allows to index words in documents. But there is a number of problems for which word indexing is not a good solution.
+For example, in some bioinformatics problems \cite{tsuruoka2008facta} pattern search takes place in DNA-code or protein sequence structure,
+which are not words and therefore inverted index can't be applied in this case.
+Similarly in some Eastern languages (Chinese, Arabic) text can not be devided in separated words.
+In addition, inverted index is limited when it comes to search for a string similar to required, but not totally identical to it.
+As an example, during the information search via search engines, where text with spelling mistakes is used as a request, inverted index can not give the right reply.
+
 Работа с текстовыми данными находит применение в широком спектре задач современной компьютерной индустрии.
 При работе с текстовыми данными очень часто используется inverted index \cite{zobel2006inverted}. Эта структура данных
 позволяет индексировать слова в документах. Но существует ряд проблем, для которых индексирование слов
