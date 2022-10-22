@@ -1,28 +1,24 @@
+First of all, compressed representation requires a number of manipulations over inital suffix array.
+Because of that there is a necessity to use intermediate $\psi$-array.
+This array implies reorganized suffix array that consists of several sets of ascending sequences of indexes.
 
-Прежде всего, сжатое представление требует ряда манипуляций над исходным суффиксным массивом.
-В связи с этим появляется необходимость использования промежуточного $\psi$-массива.
-Он представляет собой реорганизованный суффиксный массив,
-в котором присутствует несколько наборов возрастающих последовательностей индексов.
+Ascending sequence of non-negative integers is compressible, that was shown in this paper \cite{pibiri2014dynamic}.
+In order to compress this sequence it is necessary to use Elias--Fano algorithm, that makes possible to
+write $\psi$-array in a bit vector representation.
 
-Возрастающая последовательность целых неотрицательных чисел сжимаема, что было показано в работе \cite{pibiri2014dynamic}
-Для сжатия такой последовательности применяется алгоритм Элиаса--Фано, позволяющий записать
-$\psi$-массив в виде битового вектора.
+One of the characteristics of Elias--Fano representation is the opportunity to recover the values of $\psi$-array
+by index. Operations \emph{rank} and \emph{select} are defined for bit vectors,
+that work for constant time \cite{farina2009rank}.
 
-Особенностью представления Элиаса--Фано является возможность восстановления значения $\psi$-массива
-по индексу. Для битовых векторов определены операции \emph{rank} и \emph{select},
-работающие за константное время \cite{farina2009rank}.
-
-Непосредственными задачами являются:
+Objectives of the work:
 
 \begin{enumerate}
-    \item Построение суффиксного массива для данного текста (набора символов).
-    \item Построение $\psi$-массива по полученному суффиксному массиву.
-    \item Реализация алгоритма сжатия Элиаса-Фано.
-    \item Написание функции получения индекса в суффиксном массиве по $\psi$-представлению.
-    \item Реализация алгоритма распаковки индекса в $\psi$-массиве.
-    \item Написание функции поиска подстроки в исходном тексте.
-    \item Написание бенчмарков для сравнения сжатого суффиксного массива
-    с традиционным суффиксным массивом и radix tree.
+    \item Building of suffix array for given text (symbolic sequence).
+    \item Building of $\psi$-array over constructed suffix array.
+    \item Implementation of Elias--Fano compression algorithm.
+    \item Implementation of a function for getting an index in suffix array by $\psi$-representation.
+    \item Implementation of the index unpacking algorithm in $\psi$-array.
+    \item Implementation of a function for a substring search in the initial text.
+    \item Implementation of benchmarks for comparison of succinct suffix array with
+    traditional suffix array and radix tree.
 \end{enumerate}
-
-

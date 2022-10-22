@@ -1,28 +1,23 @@
 \newpage
-\section*{Аннотация}
+\section*{Abstract}
 
-\textbf{Цели и задачи работы.}
+\textbf{Goals and objectives of the work.}
 
-Данная работа посвящена исследованию структур данных,
-использующих сжатые индексы (succinct index) для хранения текстовой информации.
+This paper is dedicated to a research on data structures that use succinct index for textual information storage.
 
-Целью данной работы является проверка эффективности различных методов сжатия данных.
-Исследуется применимость сжатых индексов на практике при работе с данными определенного типа.
-Производится сравнение как с традиционными решениями (suffix array), так и с более современными (radix tree),
-использующими подход для индексирования, отличный от исследуемых структур данных.
+The goal of this work is to verify efficiency of different data compression methods.
+Application of succinct index in practice is examined to a data of a certain type.
+A comparison is made both with traditional solutions (suffix array) and with more recent ones (radix tree)
+that use indexing approach different from the data structures under study.
 
+\textbf{The Results Obtained.}
 
-\textbf{Полученные результаты.}
-
-
-Удалось получить сравнительные характеристики работы исследуемых структур данных.
-Были измерены и проанализированы:
+It was possible to obtain comparative performance characteristics of data structures under study.
+Were measured and analysed:
 \begin{enumerate}
-    \item объем потребляемой памяти;
-    \item время, требуемое для поиска подстроки;
+    \item the volume of memory used;
+    \item time used for a substring search;
 \end{enumerate}
 
-На языке Go реализована сжатая структура данных succinct suffix array. Приведены результаты потребления памяти
-для хранения сжатого индекса и скорости поиска подстроки в тексте.
-
-
+Compressed data structure - succinct suffix array was implemented in Go programming language.
+Memory consumption results for compressed index storaging and speed of substring search are shown in this paper.
