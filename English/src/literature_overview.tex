@@ -24,26 +24,26 @@ contains all the documents of a collection where this word is present.
 While processing a multiple word request the intersection of lists is used,
 that is corresponded to each word in a query.
 
-\textbf{Проблемы традиционных подходов}
+\textbf{Problems of traditional approaches}
 
-На практике встречаются случаи,
-в которых невозможно использовать традиционный поиск по словам \cite{bast2013efficient}.
-Модель поиска, в которой задачей является найти орфографически близкие слова (\emph{fuzzy search}),
-использующаяся для корректирования правописания во многих текстовых редакторах,
-не позволяет решать проблему при помощи поиска по словам.
-То же самое касается других систем, в которых используется \emph{pattern matching} \cite{bai2018adaptive}.
-Еще одним примером текстов, в которых сложно применять традиционный поиск,
-являются некоторые восточные языки.
-В них слова не делятся пробелами между собой, что делает трудным использование \emph{inverted index}.
-Наконец, к <<неудобным>> можно отнести длинные тексты, составленные из алфавита с малым набором символов.
-Характерными примерами таких текстов являются ДНК и код белковой структуры.
-Этот текст не делится на слова, что является ключевой проблемой при использовании \emph{inverted index}.
+Some cases take place in practice where it is impossible to use
+traditional full-text search by words \cite{bast2013efficient}.
+A search model in which the task is to find orthographically close words (\emph{fuzzy search}),
+that is used for spelling correction in numerous text editors,
+does not allow one to solve the problem using full-text search.
+The same applies to different systems where \emph{pattern matching} is used \cite{bai2018adaptive}.
+Another example of texts where it is difficult to apply traditional search method
+are several eastern languages.
+In these languages words are not separated by spaces that makes \emph{inverted index} difficult to use.
+Finally large texts combined from alphabet with a small amount of symbols can be attributed to <<inconvenient>> texts.
+A typical example of these texts is DNA and protein structure code.
+This text is not separated on words that is a key issue in using \emph{inverted index}.
 
-Для решения таких проблем необходимо использовать поиск по подстрокам.
-Существующие подходы (prefix tree, suffix array) занимают много места, поэтому не являются эффективными.
-Например, для prefix tree, хранящем в себе n слов со средним количеством символов в каждом слове $C$,
-требуется $O(n \cdot C)$ памяти \cite{aho1975efficient}.
-Рассмотрим подробнее suffix array, как один из самых востребованных способов индексации текстовой информации.
+To solve these problems it is necessary to perform substring search.
+Existing methods (prefix tree, suffix array) take too much space therefore they are not effective.
+For example, prefix tree that contains \emph{n} words with $C$ average number of symbols in a word
+takes $O(n \cdot C)$ memory \cite{aho1975efficient}.
+Let's take a greater look at suffix array as one of the most popular textual information indexation methods.
 
 \textbf{Полнотекстовый поиск при помощи suffix array}
 
