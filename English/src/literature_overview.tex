@@ -45,19 +45,19 @@ For example, prefix tree that contains \emph{n} words with $C$ average number of
 takes $O(n \cdot C)$ memory \cite{aho1975efficient}.
 Let's take a greater look at suffix array as one of the most popular textual information indexation methods.
 
-\textbf{Полнотекстовый поиск при помощи suffix array}
+\textbf{Full-text search using suffix array}
 
-Suffix array -- это структура данных, используемая в полнотекстовой индексации, позволяющая выполнять
-поиск подстроки в тексте размером n символов за $O(\log{}n)$ \cite{manber1993suffix}.
-При этом для хранения n слов в suffix array необходимо $O(n \log{}n)$ памяти.
-Так для ASCII-текста размером $2^{32}$ требуется $2^{32} \cdot 8 = 32$ гигабит пространства памяти.
-Для такого текста suffix array должен содержать элементы размером 32 бита.
-Тогда размер suffix array достигает $2^{32} \cdot 32 = 128$ гигабит пространства памяти,
-что в 4 раза превышает размер исходного текста.
+Suffix array is a data structure used in full-text search that allows one to perform
+substring search in a text consisting of \emph{n} symbols in $O(\log{}n)$ \cite{manber1993suffix}.
+To store \emph{n} words in suffix array it is necessary to use $O(n \log{}n)$ of memory.
+For instance, $2^{32}$ ASCII-text requires $2^{32} \cdot 8 = 32$ GB memory space.
+For this text suffix array must contain 32 bit elements.
+Therefore, suffix array size reaches $2^{32} \cdot 32 = 128$ GB memory space that is
+4 times greater than the initial text size.
 
-Suffix array представляет собой отсортированную в лексикографическом порядке
-последовательность суффиксов. Для лучшего понимания устройства suffix array, рассмотрим эту структуру данных на примере индексирования
-слова mississippi:
+Suffix array is a sorted in a lexicographic order sequence of suffixes.
+In order to better understand the structure of suffix array, consider this data structure
+using as an example word <<mississippi>>:
 \\(0) mississippi
 \\(1) ississippi
 \\(2) ssissippi
@@ -70,13 +70,14 @@ Suffix array представляет собой отсортированную 
 \\(9) pi
 \\(10) i
 
-Suffix array, составленный из таких суффиксов, будет иметь вид:
+Suffix array consisting of these suffixes would be presented as:
 
 10 7 4 1 0 9 8 6 3 5 2
 
-Обычно конец документа обозначается специальным символом, не входящим в алфавит хранящегося в массиве текста.
-В качестве такого разделителя в этой работе был выбран символ доллара \$.
-Современные подходы по построению suffix array позволяют конструировать структуру данных за $O(n)$.
+Usually the end of document is indicated by a special symbol that is not included in
+the alphabet of a text stored in the array.
+As a delimiter in this paper dollar symbol \$ has been chosen.
+Modern approaches to suffix array construction allows one to  build data structure in $O(n)$.
 
 \textbf{Radix tree}
 
@@ -85,20 +86,24 @@ Suffix array, составленный из таких суффиксов, бу�
 \begin{wrapfigure}{r}{0.25\textwidth} %this figure will be at the right
  \centering
  \includegraphics[width=0.45\textwidth]{PatriciaTrie}
- \caption{Пример Radix tree}
+ \caption{Radix tree example}
 \end{wrapfigure}
 
-Radix tree представляет собой сжатое prefix tree. В свою очередь, prefix tree является
-структурой данных, которая предоставляет интерфейс ассоциативного массива и позволяет
-хранить значения в виде key-value пар.
-В этом исследовании в качестве key выбраны строки, причем в отличие от обычный деревьев,
-на ребрах radix tree могут храниться как один элемент (символ),
-так и последовательность элементов (строка).
+Radix tree is a compressed prefix tree. In its turn, prefix tree is a data structure
+that represents the intreface of associative array and allows one to store values in key-value pairs.
+In this paper the string is chosen as a key, and in a contrary to regular trees,
+the edges can contain either one element (symbol), or a sequence of elements (string).
 
-Radix tree широко применяется в ядре Linux для связи указателя с длинным целочисленным ключом \cite{Linux2018}.
-Эта структура данных эффективна с точки зрения скорости поиска и хранения информации.
-В то же время, Radix tree применяется в IP-адресации, так как очень удобна для хранения
-иерархической структуры IP-адресов \cite{Radix2019}.
+Radix tree is commonly used in Linux kernel to bind a pointer with a long integer key \cite{Linux2018}.
+This data structure is effective from the perspective of a search speed and data storage.
+At the same time, Radix tree is used in IP-addressing because it is extremely useful for
+hierarchical IP-addressing structure \cite{Radix2019} storage.
+
+
+
+
+
+
 
 Рассмотрим подробнее характеристики radix tree. Пусть требуется хранить ключи размером k
 при хранении n элементов в дереве. Тогда добавление элемента, поиск и удаление элемента
