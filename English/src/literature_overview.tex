@@ -99,51 +99,53 @@ This data structure is effective from the perspective of a search speed and data
 At the same time, Radix tree is used in IP-addressing because it is extremely useful for
 hierarchical IP-addressing structure \cite{Radix2019} storage.
 
+Let's take a detailed look at radix tree characteristics. Let us assume that it is required
+to store keys the size of \emph{k} storing \emph{n} elements at the tree. Then insertion of an element,
+search and removal take $O(k)$ operations \cite{leis2013adaptive}.
 
+For many dictionary search requests radix tree can be faster and more effective than hash tables.
+Despite the fact that often the complexity of search in a hash table is considered to be $O(1)$,
+the necessity for the initial caching of input data is ignored in this assumption.
+It takes $O(k)$ operations where \emph{k} is the length of input string.
+Radix tree performs the search in $O(k)$, without initial data caching and has greater
+cache localization characteristics.
+It also preserves the order allowing one to perform an ordered scan,
+get min / max values, scan over common prefix etc.
 
+Because of all these advantages, radix tree is widely used in a Redis data base, program
+products of HashiCorp, such as Terraform, Consul, Vault, Nomad etc \cite{Redis2018},
+that is of additional interest for studying it on textual data and comparison with suffix array.
 
+\textbf{Succinct data representation}
 
+One of the most important problems of this research is
+a program implementation of succinct index storage for suffix array.
+That is why it is important to understand what data can be considered succinct.
 
+There are several degrees of information compression.
+Let us assume that the storage of a piece of data takes \emph{Z} bit.
+Succinct data structures take \(Z + o(Z)\) bit, implicit -- \(Z + o(1)\) bit and
+compact -- \(O(Z)\) bit \cite{huo2014practical}. In this paper it is proposed to
+compress suffix array in succinct data representation.
+Thus, the size of array is only a little bit greater than the size of initial text.
 
-Рассмотрим подробнее характеристики radix tree. Пусть требуется хранить ключи размером k
-при хранении n элементов в дереве. Тогда добавление элемента, поиск и удаление элемента
-занимают $O(k)$ операций \cite{leis2013adaptive}.
+\textbf{$\Psi$-array}
 
-Для многих запросов поиска по словарю radix tree может быть быстрее и эффективнее, чем хеш-таблицы.
-Несмотря на то, что обычно сложность поиска по хэш таблице принимают за $O(1)$,
-при этом игнорируется необходимость сначала хешировать входные данные.
-На это обычно требуется $O(k)$ операций, где k -- длина входной строки.
-Radix tree выполняет поиск за $O(k)$, без необходимости сначала хешировать и имеют гораздо лучшую локальность кеша.
-Они также сохраняют порядок, позволяя выполнять упорядоченное сканирование,
-получать минимальные / максимальные значения, сканировать по общему префиксу и т.д.
-
-Благодаря всем этим преимуществам, radix tree широко распространено в базе данных Redis, программных продуктах
-компании HashiCorp, таких как Terraform, Consul, Vault, Nomad и т.д. \cite{Redis2018},
-что представляет дополнительный интерес для его изучения на текстовых данных и сравнения с suffix array.
-
-\textbf{Сжатое представление данных}
-
-Одной из главных задач этой работы является программная реализация сжатого хранения индекса для suffix array.
-Поэтому важно определить, какие данные можно считать сжатыми.
-
-Существуют различные степени сжатости информации.
-Предположим, что для хранения некоторого количества данных требуется Z бит.
-Сжатые (succinct) структуры данных занимают \(Z + o(Z)\) бит, implicit -- \(Z + o(1)\) бит и
-compact -- \(O(Z)\)) бит \cite{huo2014practical}. В этой работе предлагается сжать suffix array, представив его в succinct виде.
-Таким образом, размер массива немногих больше превосходит размер исходного текста.
-
-\textbf{$\Psi$-массив}
-
-Важным место в теории сжатого представления индекса занимает промежуточный $\psi$-массив.
-Характерной особенностью всех алгоритмов сжатия succinct suffix array (CSA)
-является то, что сжимается не непосредственно индекс, а его представление
-в виде $\psi$-массива. Вспомогательный массив можно получить из suffix array путем следующих манипуляций с индексами.
-\newpage
-Рассмотрим построение $\psi$-массива на примере знакомой строки \textbf{mississippi\$}:
+An important part in a theory of succinct index representation is taken by an intermediate $\psi$-array.
+A characteristic feature of all the compression algorithms of a compressed suffix array (CSA) is 
+that not the index itself is compressed but it's representation as a $\psi$-array.
+Auxiliary array can be obtained from suffix array by the following index manipulations.
+Let us consider a $\psi$-array construction by the example of a familiar string \textbf{mississippi\$}:
 \\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
 \\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1 \,\,\,\,2 \,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
 \\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6 \,\,3 \,\,5 \,\,2
 \\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
+
+
+
+
+
+
 
 Будем называть потомком (successor) самый большой суффикс подстроки, кроме исходной подстроки.
 Т.е. для подстроки issippi\$ потомком является ssippi\$.
