@@ -141,45 +141,46 @@ Let us consider a $\psi$-array construction by the example of a familiar string 
 \\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6 \,\,3 \,\,5 \,\,2
 \\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
 
-
-
-
-
-
-
-Будем называть потомком (successor) самый большой суффикс подстроки, кроме исходной подстроки.
-Т.е. для подстроки issippi\$ потомком является ssippi\$.
-$\Psi$-массив указывает на потомок для каждого выбранного суффикса.
-Например, рассмотрим $SA[7] = 8$. Его потомком является позиция в suffix array, которая хранит $8 + 1 = 9$.
-Таким образом, $\psi[7] = 6$. Главное соотношение между $\Psi$-массивом и suffix array:
+Let us call the largest suffix of a substring except for the initial string as a successor.
+Therefore, for substring issippi\$ successor is ssippi\$.
+$\Psi$-array points out to a successor for every chosen suffix.
+As an example consider $SA[7] = 8$. It's successor is a position in a suffix array that contains $8 + 1 = 9$.
+Thus, $\psi[7] = 6$. The main relation between a $\psi$-array and suffix array:
 \begin{equation}\label{sa:1}
- SA[i] = SA[\psi[i]] - 1
+SA[i] = SA[\psi[i]] - 1
 \end{equation}
-Необходимо отметить, что $\Psi[0] = \$$, т.к. для первого элемента в suffix array нет потомка.
-При этом $SA[5]$ ссылается на 0-й индекс, то есть на всю строку целиком.
-Иными словами, элемент suffix array ссылается на начало текста,
-т.е. никакой другой суффикс не может иметь его в качестве потомка.
-Соответственно в $\psi$-массиве нет элемента, равного 5.
+It is necessary to emphasize that $\Psi[0] = \$$, because there is no successor for the first element in a suffix array.
+However, $SA[5]$ is reffered to 0 index, that is the whole string overall.
+In other words, the element of suffix array is reffered to the beginning of the text,
+that is no other suffix can have it as a child.
+There is no element equal to 5 in a $\psi$-array, respectively.
 
-\textbf{Восстановление suffix array из $\psi$-массива}
+\textbf{Suffix array reconstruction from a $\psi$-array}
 
-Существует возможность восстановить исходный suffix array по сгенерированному $\psi$-массиву
-фактически с помощью операций, обратных к тем, которые были представлены в предыдущем параграфе.
-Коснемся подробнее особенностей работы этого алгоритма.
+There is an opportunity to reconstruct the initial suffix array by generated $\psi$-array
+with operations that are reversive to those that were present in the last paragraph.
+Let us have a better look at the specific features of this algorithm.
 
-В первую очередь необходимо найти индекс элемента suffix array, который не встречается в $\psi$-массиве.
-В нашем примере он равен 5. Из приведенных выше рассуждений следует, что $SA[5] = 0$.
-Таким образом был декодирован один элемент исходного suffix array. Из формулы \ref{sa:1} для $i = 5$ следует:
+First of all, it is necessary to find the index of the element of suffix array that has not been present in the $\psi$-array.
+In our example it is equal to 5. From the discussions above, it can be seen that $SA[5] = 0$.
+Thus, one element of an initial suffix array was reconstructed. From the formula \ref{sa:1} for $i = 5$ follows:
 
 \[SA[5] = SA[\psi[5]] - 1\]
 \[0 = SA[4] - 1\]
 \[SA[4] = 1\]
 
-Еще один элемент suffix array восстановлен! Таким образом можно восстановить всю оставшуюся последовательность.
-Время на поиск первого элемента составляет \(O(n)\) операций.
-Существуют некоторые улучшения скорости поиска нужного элемента в suffix array, требующие дополнительных
-структур данных, хранящих значение suffix array на каждом \(\log n\) шаге \cite{andersensimple}.
-Такой способ выходит за рамки этой работы, поскольку главной задачей является максимальное сжатие индекса.
+Another element of a suffix array is reconstructed!
+This way the whole remaining sequence can be reconstructed.
+Time taking to find the first element is equal to \(O(n)\) operations.
+There are several improvements of the search speed of a certain elements in a suffix array
+that require additional data structures storing suffix array values at every \(\log n\) step \cite{andersensimple}.
+This approach goes beyond this paper, because the main problem of it is to find the best index compression.
+
+
+
+
+
+
 
 \textbf{Сжатие $\psi$-массива}
 
