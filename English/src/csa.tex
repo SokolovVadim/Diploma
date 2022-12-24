@@ -10,11 +10,11 @@
 % search sa
 % complexity +
 
-Перейдем к описанию реализации CSA. Как было упомянуто в обзоре литературы, для начала необходимо
-построить индекс таким же способом, как это происходит в suffix array.
-Для этого требуется $O(n)$ операций \cite{huo2014practical}.
+Let us move on to the implementation of CSA. As it was mentioned in the literature overview,
+it is necessary to construct the index the same way as it was done for a suffix array.
+It takes $O(n)$ operations \cite{huo2014practical}.
 
-\textbf{Структура CSA}
+\textbf{CSA structure}
 
 \begin{lstlisting}[caption=CSA structure]
 type Csa struct {
@@ -25,10 +25,10 @@ type Csa struct {
 }
 \end{lstlisting}
 
-На приведенном выше листинге 4 обозначена упрощенная структура CSA. Она состоит из исходного текста
-(сжимается только индекс, текст остается в прежнем виде), индекса, $\psi$-массива и длины текста.
-Индекс строится с помощью функции, в которой за основу алгоритма взят алгоритм построения suffix array
-из библиотеки языка Go \cite{golang2016sa}.
+At the listing 4 before a simplified structure of CSA is shown. It consists of the initial text
+(only index is compressed, the text remains in the same condition), index, $\psi$-array and a text length.
+Index is build with a function that uses suffix array construction algorithm taken from Go library
+\cite{golang2016sa}.
 
 \textbf{Построение $\psi$-массива}
 
