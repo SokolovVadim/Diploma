@@ -176,21 +176,15 @@ There are several improvements of the search speed of a certain elements in a su
 that require additional data structures storing suffix array values at every \(\log n\) step \cite{andersensimple}.
 This approach goes beyond this paper, because the main problem of it is to find the best index compression.
 
+\textbf{$\Psi$-array compression}
 
-
-
-
-
-
-\textbf{Сжатие $\psi$-массива}
-
-Рассмотрим подробнее $\psi$-массив:
+Let us have a detailed look at $\psi$-array:
 \\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
 \\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1 \,\,\,\,2 \,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
 \\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6 \,\,3 \,\,5 \,\,2
 \\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
 
-Отсортированный набор суффиксов имеет вид:
+Sorted suffix array looks like that:
 \\ (0) \,\,\,\$
 \\ (1) \,\,\,i\$
 \\ (2) \,\,\,ippi\$
@@ -204,86 +198,89 @@ This approach goes beyond this paper, because the main problem of it is to find 
 \\ (10) ssippi\$
 \\ (11) ssissippi\$
 
-Стоит обратить внимание на его структуру: он состоит из набора возрастающих последовательностей индексов.
-Рассмотрим возрастающую последовательность 2, 3, 8, 9.
+It is worth mentioning the structure of it: it contains a set of adjusting indices.
+Let us consider the ascending sequence 2, 3, 8, 9.
 
 $SA[2] = 7$, $T[7] = i$.
-$SA[3] = 4$, $T[4] = i$. Примечательно, что $SA[6] = 9$, $T[9] = p$.
-То есть чередование индексов с возрастания на убывание соответствует смене символа с i на p.
+$SA[3] = 4$, $T[4] = i$.
+
+It is noteworthy that $SA[6] = 9$, $T[9] = p$.
+Thus the alternation of the index from increase to decrease corresponds to the switch of symbols from \emph{i} to \emph{p}.
 
 \begin{theorem}
  \label{lemma:1}
- Два последовательных элемента $\psi$-массива являются возрастающими, если соответствующие суффиксы,
- на которые они ссылаются, начинаются с одного и того же символа.
+ Two consequent elements of a $\psi$-array are ascending if corresponding suffixes that they are referred to
+ start from the same symbol.
 \end{theorem}
 
 \begin{proof}
- По построению, suffix array представляет собой набор индексов в исходном тексте,
- отсортированный в лексикографическом порядке. Это означает, что $T[SA[i]] < T[SA[i + 1]]$
- $\forall i \in [0, n).$ Эти два суффикса имеют общий первый символ. Поэтому они отличаются в следующих
- элементах, например, во втором: $T[SA[i] + 1] < T[SA[i + 1] + 1].$
+    By construction, suffix array is a set of indices in the initial text,
+    sorted in lexicographic order. It means that $T[SA[i]] < T[SA[i + 1]]$
+    $\forall i \in [0, n).$ These two suffixes have common first symbol.
+    That is why they are different in the following elements, e.g. in the second one:
+    $T[SA[i] + 1] < T[SA[i + 1] + 1].$
 
- $\Psi$-массив ссылается на потомка для данного суффикса: $T[SA[\psi[i]]] < T[SA[i] + 1].$
- Т.к. $T[SA[i]]$ и $T[SA[i + 1]]$ имеют одинаковый первый символ, их потомки упорядочены.
- Если $T[SA[\psi[i]]] < T[SA[\psi[i + 1]]]$, тогда из-за упорядоченности индекс в suffix array
- для первого должен находиться перед индексом для второго. Следовательно индексы (значения $\psi$-массива)
- должны быть упорядочены, если суффиксы имеют общий первый символ.
+    $\Psi$-array is reffered to a successor of a given suffix: $T[SA[\psi[i]]] < T[SA[i] + 1].$
+    Because $T[SA[i]]$ and $T[SA[i + 1]]$ have the same first symbol, their successors are ordered.
+    If $T[SA[\psi[i]]] < T[SA[\psi[i + 1]]]$, then because of orderliness the index in suffix array
+    for the first one should precede the index for the second one. Therefore, indices (values of $\psi$-array)
+    should be ordered if suffixes have a common first symbol.
 \end{proof}
 
-Возрастающие последовательности неотрицательных целых чисел сжимаемы \cite{andersensimple}.
-Самый простой путь для хранения таких последовательностей -- битмап.
-Однако этот способ не позволяет иметь произвольный доступ к элементам.
-Рассмотрим более совершенный алгоритм сжатого представления данных.
+Ascending sequences of non-negative integer numbers are compressible \cite{andersensimple}.
+The easiest way to store these sequences is a bitmap.
+However, this method does not allow one to have a random access to the elements.
+Let us consider in detailes a more advanced algorithm of succinct data representation.
 
-\textbf{Кодировка Elias--Fano}
+\textbf{Elias--Fano Encoding}
 
-Сжатие при помощи метода Elias--Fano \cite{pibiri2014dynamic}
-позволяет представлять монотонно возрастающие последовательности
-целых неотрицательных чисел в виде битовых векторов. Этот способ делает возможным
-хранение неубывающей последовательности $n$ целых чисел размером $[0, m)$,
-занимая $2n + n[\log m/n]$ бит, предоставляя доступ к $i$-му элементу за $O(1)$.
-Сравнив размеры структуры данных с минимально возможным занимаемым местом в памяти
-с точки зрения теории информации, Elias--Fano кодировка является сжатым (succinct) индексом.
+Compression via Elias--Fano method \cite{pibiri2014dynamic}
+allows one to represent monotonically increasing sequences
+of non-negative integer numbers in the form of bit vectors. This approach makes possible to
+store a non-decreasing sequence of $n$ integer values the size of $[0, m)$,
+taking $2n + n[\log m/n]$ bit, allowing access to the $i$-th element in $O(1)$.
+Comparing the size of data structure with a minimal possible space in a memory
+from the theory of information point of view, Elias--Fano coding is a succinct index.
 
 \begin{figure}[t]
  \includegraphics[width=12cm]{Elias-Fano}
- \caption{Пример построения кода Elias-Fano}
+ \caption{Example of the code construction for Elias-Fano}
  \centering
  \label{fig:EF}
 \end{figure}
 
-В начале каждое число из последовательности кодируется $\log m$ битами данных.
-Двоичное представление элементов разбито на две части: верхнюю часть, содержащую в себе
-первые $\log n$ бит, и нижнюю, с оставшимися $\log m - \log n = \log m / n$ бит.
-Объединение нижних битов занимает $n \log m$ бит. Верхние биты представляют собой
-набор из $n + m / 2^{\log m/n}$ бит \cite{antonio2018integers}.
-Начиная с пустого битового вектора, мы добавляем в эту часть 0
-в качестве стоп-бита для каждого возможного значения, представляемого битами старшей части.
-Мы добавляем 1 для каждого фактически присутствующего значения, выставляя его перед соответствующим стоп-битом.
+In the beginning each number from the sequence is encoded by $\log m$ bits of data.
+Binary elements representation is devided by two parts: upper one, containing
+first $\log n$ bit, and lower one with the remaining $\log m - \log n = \log m / n$ bit.
+The union of lower bits takes $n \log m$ bit. Upper bits are a set of 
+$n + m / 2^{\log m/n}$ bit \cite{antonio2018integers}.
+Starting from an empty bit vector, we add 0 to this part as a stop-bit
+for each possible value represented by the bits of an upper part.
+For each actually present value 1 is added, setting it before the corresponding stop-bit.
 
-В качестве примера рассмотрим отсортированную последовательность {2,3,5,7,11,13,24}.
-На рисунке \ref{fig:EF} показана схема кодирования. Наибольшим числом в наборе (universe) является 24.
-Поэтому для представления каждого элемента необходимо выделить 5 бит на элемент.
-Затем нужно разбить бинарное представление на две части: верхнюю и нижнюю.
-Исходя из ранее оговоренных условий, выберем 3 бита под верхнюю часть и 2 бита под нижнюю.
-Всего в последовательности присутствует 7 элементов. Рассмотрим число 2. Для него имеем
-$2 = 0b00010$ и соответственно 000 в качестве верхней части и 10 в качестве нижней.
-Повторяя этот процесс, получим набор нижних частей для каждого элемента.
-Затем объединим полученные части вместе. Для верхних частей имеется $2^3$ вариантов
-наборов значений. С каждым таким набором ассоциируется счетчик, который увеличивается на единицу,
-если число из последовательности имеет соответствующую верхнюю часть.
-Так для 2 инкрементируем набор 000. Число $3 = 0b00011$ с верхней частью 000 идет в тот же набор.
-Для числа $5 = 0b00101$ с верхней частью 001 инкрементируем набор 001 и т.д.
-Наконец, кодируем счетчики унарно, добавляя столько единиц в представление счетчика,
-сколько имеет значение каждого счетчика, за которым следует 0 бит.
-Окончательное кодирование Elias-Fano получается объединением полученных верхней и нижней частей.
+Let us consider as an example a sorted sequence {2,3,5,7,11,13,24}.
+The figure \ref{fig:EF} shows a coding scheme. The largest number in the universe is 24.
+Therefore for the representation of each element it is necessary to allocate 5 bits per element.
+Then the binary representation is separated into two parts: upper and lower one.
+Starting from the conditions described before, let us choose 3 bits for an upper part and 2 bits for a lower one.
+Overall there are 7 elements in a sequence. Let us consider number 2.
+For it we have $2 = 0b00010$ and 000 as an upper part and 10 as a lower part correspondingly.
+Repeating this process, a set of upper and lower parts will be obtained for each element.
+Then these parts are combined together. For upper parts there are $2^3$ variants of sets of values.
+With each of these numbers a counter is associated that increases by one if a number from the sequence
+has the same upper part. So for 2 the set 000 is incremented. A number $3 = 0b00011$ with 000 upper part
+goes to the same set. For a number $5 = 0b00101$ with 001 upper part, the set 001 is incremented and so on.
+Finally, the unary coding is performed, adding as many 1s in a counter representation as it is a value of
+each counter after which there is a 0-bite. The resulting Elias-Fano encoding is a union of obtained
+upper and lower parts.
 
-\textbf{Восстановление данных из кода Elias--Fano}
+\textbf{Data resconstruction from the Elias--Fano code}
 
-Для восстановления исходной монотонной неубывающей последовательности чисел, необходимо разработать операцию
-доступа к $i$-му элементу последовательности, $i \in [0, n)$. Для доступа к нижней части
-достаточно просто получить соответствующие биты, т.к. длина вектора для хранения элемента известна.
-Для получения старшей части, необходимо осуществить операцию \emph{select}.
-Операция \emph{select($i$)} позволяет получить позицию $i$-го бита, выставленного в 1 в битовом векторе.
-Эта операция может быть выполнена за $O(1)$, что позволяет получать произвольный доступ к элементу
-последовательности без полного раскодирования всей последовательности целиком \cite{farina2009rank}.
+For an initial reconstruction of a monotonically non ascending sequence of numbers it is necessary to
+desing an operation with an access to the $i$-th element of a sequence, $i \in [0, n)$.
+To access the lower part it is possible to get corresponding bits because the length of a vector for
+the element storage is known.
+To get the upper part it is necessary to perform a \emph{select} operation. \emph{Select($i$)}
+operation allows one to get a postion of the $i$-th bit set to 1 in a bitvector.
+This operation takes $O(1)$ time that provides a random access to an element
+of the sequence without a complete decoding of the whole sequence overall \cite{farina2009rank}.
