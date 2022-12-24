@@ -1,7 +1,9 @@
-Реализация radix tree на языке Go взята из следующего источника: \cite{golang2016sa}
-Во многом выбор обусловлен удобством встраивания бенчмарка в существующую систему тестирования на языке Go.
-При этом с алгоритмической точки зрения эта реализация подтверждает
-теоретическое описание сложности поиска подстроки за $O(1)$.
+Radix tree implementation in Go language is taken from the following source: \cite{golang2016sa}
+The main reason of this decision is caused by the simplisity of insertion of the benchmark
+in the existing testing system in Go language.
+From the algorithmic point of view this implementation confirms the theoretical description of
+a substring search complexity that is $O(1)$.
+
 \newpage
 \begin{lstlisting}[caption=Radix tree example]
 func BenchmarkConstruct(b *testing.B, testStr string) {
@@ -14,10 +16,10 @@ func BenchmarkConstruct(b *testing.B, testStr string) {
 }
 \end{lstlisting}
 
-На приведенном листинге 2 в кратком виде показана функция построения radix tree.
-В начале генерируется набор подстрок из текста, прочитанного из файла. В функции $fillRadixTree$
-происходит добавление подстрок в дерево. Сравнительные характеристики построения radix tree
-для Amazon Text Corpora \cite{amazon2013text} приведены в таблице \ref{table:4}.
+Listing 2 briefly shows the radix tree construction function.
+In the beginning a set of substrings is generated from the text that is read from file.
+In $fillRadixTree$ function substrings are added to the tree. Comparison of
+radix tree construction for Amazon Text Corpora \cite{amazon2013text} are shown in a table \ref{table:4}.
 
 % size, kB: 196, 148, 98, 79, 49, 10, 5, 2
 % time, s:  276.419, 128.494, 57.319, 36.786, 14.632, 0.845, 0.414, 0.284
@@ -27,7 +29,7 @@ func BenchmarkConstruct(b *testing.B, testStr string) {
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Размер текста, KB & Память, MB & Время, s\\
+        Text size, Kb & Memory, Mb & Time, s\\
         \hline
         196 & 20248 & 276.419\\
         \hline
@@ -46,13 +48,13 @@ func BenchmarkConstruct(b *testing.B, testStr string) {
         2 & 2 & 0.284\\
         \hline
     \end{tabular}
-    \caption{Построение radix tree}
+    \caption{Radix tree construction}
     \label{table:4}
 \end{table}
 
-Ниже в листинге 3 приведен упрощенный пример функции поиска подстроки в дереве.
-Построенная структура показывает очень хороший результат поиска подстроки за константное время.
-Его можно видеть в таблице \ref{table:5}.
+In the listing 3 below the example of a tree substring search function is given.
+This data structure shows quite good results of a substring search in a constant time.
+It can be seen at the table \ref{table:5}.
 
 \newpage
 \begin{lstlisting}[caption=Radix tree lookup]
@@ -78,7 +80,7 @@ func getSubstring(r *radix.Tree,
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Размер текста, KB & Память, MB & Время, s\\
+        Text size, Kb & Memory, Mb & Time, s\\
         \hline
         150 & 11529 & 256\\
         \hline
@@ -99,6 +101,6 @@ func getSubstring(r *radix.Tree,
         20 & 212 & 220\\
         \hline
     \end{tabular}
-    \caption{Поиск подстроки в radix tree}
+    \caption{Substring search in radix tree}
     \label{table:5}
 \end{table}
