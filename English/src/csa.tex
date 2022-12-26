@@ -30,46 +30,50 @@ At the listing 4 before a simplified structure of CSA is shown. It consists of t
 Index is build with a function that uses suffix array construction algorithm taken from Go library
 \cite{golang2016sa}.
 
-\textbf{Построение $\psi$-массива}
+\textbf{$\Psi$-array construction}
 
-Для построения $\psi$-массива нужно принять $\psi[0] = \$$. Затем произвести итеративный обход
-suffix array и найти индекс, соответствующее значение которого в suffix array совпадает с текущим,
-увеличенным на единицу. В листинге 5 показан псевдокод алгоритма.
+In order to construct a $\psi$-array, it is necessary to assume that $\psi[0] = \$$. Then make
+a traversal over suffix array and find an index that corresponds to a value in suffix array that is
+equal to a current one with addition of 1. Listing 5 shows a pseudocode of the algorithm.
 
-\begin{lstlisting}[caption=Построение CSA]
-func ConstructPsi() {
-	for i < len {
-		if sa[j] = sa[i] + 1 {
-			psi[i] = j
+\begin{lstlisting}[caption=CSA construction]
+	func ConstructPsi() {
+		for i < len {
+			if sa[j] = sa[i] + 1 {
+				psi[i] = j
+			}
 		}
 	}
-}
 \end{lstlisting}
 
-\textbf{Вспомогательные структуры данных}
+\textbf{Additional data structures}
 
-Для хранения данных используется битмап (bitmap) из пакета\\ Roaring.bitmap \cite{chambi2016better}.
-Это быстрая и эффективная реализация битмапа. Также Roaring используется во многих продуктах,
-таких как Apache Druid, LinkedIn Pinot, Google Procella и т.д.
+A bitmap from the Roaring.bitmap package \cite{chambi2016better} is used to store the data.
+This bitmap implementation is fast and effective. Also Roaring is used at many products such as
+Apache Druid, LinkedIn Pinot, Google Procella etc.
 
-Полученный $\psi$-массив представляет собой набор монотонно неубывающих последовательностей чисел.
-Алгоритм Elias-Fano позволяет преобразовывать каждую такую последовательность в битвектор в отдельности.
-Количество этих последовательностей совпадает с размером алфавита, используемого в тексте \cite{andersensimple}.
-Возникает вопрос, каким образом можно организовать хранение таких битвекторов.
+Obtained $\psi$-array is a set of monotonically non-decreasing sequences of numbers.
+Elias-Fano algorithm allows one to transfer each of these sequences to a bitvector separately.
+The quantity of these sequences is equal to the size of alphabet used in a text \cite{andersensimple}.
+A question arises: how is it possible to organize the storage of these bitvectors?
 
-Одним из решений является использование двух дополнительных массивов:
-первый для хранения оступа в $\psi$-массиве, второй для хранения символа,
-соответствующего возрастающей последовательности.
-В этой работе кодировка текста представляет собой ASCII-код или код меньшего размера.
-Таким образом, размер алфавита ограничен 128 символами. Следовательно, размер
-дополнительных массивов не превышает $2 \cdot m$, где $m$ -- размер алфавита.
-Массив с оступами используется для быстрого индексирования по массиву битмапов.
+One of the solutions is to use two additional arrays:
+the first one to store the offset in a $\psi$-array and the second one to store a symbol
+corresponding to the ascending sequence.
+In this paper text coding is represented by ASCII-code or a less size code.
+Thus the alphabet size is limited by 128 symbols. Therefore the size of additional arrays is not
+greater than $2 \cdot m$, where $m$ is the size of the alphabet.
+An array with offsets is used for a fast indexing over an array of bitmaps.
 
-Заполнение дополнительных структур данных и расчет отступов происходит при сжатии каждой отдельной
-монотонной неубывающей последовательности индексов.
-Для отделения таких последовательностей используется описанное ранее свойство из Леммы \ref{lemma:1}.
-Нарушение возрастания $\psi$-массива соответсвует смене символа. Таким образом можно идексировать
-битмапы и заполнить вспомогательный массив с символами используемого алфавита.
+Additional data structures fulfillment and offsets calculation are performed during the compression
+of each separate monotonically non-decreasing sequnce of indices.
+To extract these sequences a peroperty described in Lemma \ref{lemma:1} is used,
+A termination in ascending of a $\psi$-array corresponds to a symbol switch.
+This way it is possible to index bitmaps and fulfill supporting array with symbols of the alphabet used.
+
+
+
+
 
 \textbf{Elias-Fano}
 
