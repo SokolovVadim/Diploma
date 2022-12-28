@@ -2,6 +2,27 @@
 % what have been proved
 % what are the further research topics to be covered
 
+Using Go language data structure compressed suffix array (CSA) was implemented.
+It has a functionality of a traditional suffix array allowing one to solve
+problems of substring lookup. Elias-Fano algorithm was implemented allowing one
+to present an index in a succinct representation. Comparative characteristics of
+the work for construction and substring lookup for CSA and suffix array were combined
+for texts with different contexts.
+The dependency between memory consumed by data structures and the size of the initial text
+was studied. A comparison between radix tree and these data structures was performed
+by construction time and substring lookup time as well as by memory consumed.
+
+In terms of memory used CSA showed it's efficiency in comparison to suffix array and radix tree,
+but the algorithm of index construction and the substring lookup algorithm are less fast
+than similar algorithms in a traditional suffix array. Application of the CSA at real data
+was considered at applied problems such as substring lookup at a protein sequence and
+pattern matching at DNA code used in bioinformatics.
+The efficiency of substring search using radix tree was demonstrated. The complexity
+of its application was shown for textual data because of large data consumption at tree construction step.
+
+Futher studies in this research field can rely on a development of succinct representation of
+existing classical data structures.
+
 На языке Go была разработана структура данных сжатый суффиксный массив (CSA), имеющая
 функционал традиционного suffix array, позволяющего решать задачи поиска по подстрокам.
 Реализован алгоритм Elias-Fano, позволяющий представлять индекс в сжатом виде.

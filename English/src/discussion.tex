@@ -3,22 +3,22 @@
 % CSA
 % Comparison
 
-Рассмотренная структура данных, сжатый суффиксный массив (CSA), показала свою эффективность
-с точки зрения памяти, занимаемой для хранения индекса. Относительно традиционного
-suffix array, как было показано на графиках сравнительных характеристик,
-при достаточно большом размере исходного текста CSA позволяет использовать меньше памяти, чем
-suffix array, сохраняя при этом возможность осуществлять поиск подстроки.
-Как было замечено при обсуждении зависимости сжатия от длины текста,
-при малых значениях размера входного текста suffix array является более эффективным с точки
-зрения потребляемой памяти, что вызвано дополнительными затратами на обслуживание
-вспомогательных структур данных, использующихся для построения сжатого индекса.
-В то же время, как алгоритм построения индекса, так и поиска подстроки в CSA работают
-медленнее, чем в исходном. Тем не менее, существуют методы улучшения скорости
-работы этих алгоритмов, позволяющие CSA достигнуть результатов, не уступающих suffix array \cite{andersensimple}.
+Considered data structure, compressed suffix array (CSA) showed it's efficiency
+in terms of memory used for index storage. In comparison to traditional
+suffix array as it was demonstrated at the graphs of comparable characteristics,
+with a large enough size of the initial text CSA consumes less memory than suffix array
+while preserving the opportunity to perform a substring lookup.
+As it was mentioned at the discussion of dependency between compression from the text lenght,
+at small initial text size suffix array is more effective in terms of memory consumption that
+is caused by additional costs for maintaining supplementary data structures used for succinct index construction.
+At the same time an algorithm of index construction as well as a substring lookup in CSA
+work slower than in the classic one. Nevertheless, there are several methods of the
+speed increase in these algorithms allowsing CSA to achieve results that are not worse
+than suffix array ones \cite{andersensimple}.
 
-Результаты, полученные при сравнении radix tree с остальными исследуемыми структурами данных,
-подтверждают эффективность поиска подстроки в radix tree за константное время. Однако
-для индексации по тексту необходимо заполнить дерево подстроками исходного текста,
-занимающими значительно большие объемы памяти по сравнению с suffix array и CSA.
-Аналогично, скорость заполнения дерева при построении не позволяет считать radix tree
-эффективным при работе с подстроками исходного текста.
+The results obtained by the comparison of radix tree with other studied data structures
+confirm the efficiency of substring lookup in radix tree in constant time.
+However, text indexation requires fulfillment of the tree by substrings of the initial text,
+that takes significantly more memory than suffix array and CSA.
+Similarly, filling speed for a tree at the construction does not allow one to consider
+radix tree as an effective method for operations with substrings of the initial text.

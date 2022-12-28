@@ -15,7 +15,7 @@ a reduction of the ratio, that is compression coefficient increase.
 Remarkably, for small sizes of the initial text CSA takes more space than suffix array.
 It is explained by the usage of additional data structures descibed at the previous pages.
 At the CSA construction they consume memory comparable by the order to the index size
-in a compressed representation. For large texts CSA becomes more effective in comparison to
+in a succinct representation. For large texts CSA becomes more effective in comparison to
 classic suffix array.
 
 \begin{figure}[h!]
@@ -26,7 +26,7 @@ classic suffix array.
 \end{figure}
 
 Relative compression CSA/SA for different texts is shown at the figure \ref{fig:CSA_compression_ratio_dif_texts}.
-It is possible to explicitly notice the dependency between a compressed index size from the alphabet size,
+It is possible to explicitly notice the dependency between a succinct index size from the alphabet size,
 that can not be said about suffix array and radix tree.
 
 \begin{figure}[h!]
