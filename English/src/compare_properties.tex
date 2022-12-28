@@ -1,36 +1,37 @@
-На рисунке \ref{fig:CSA_Lookup_diff_texts} представлены сравнительные характеристики поиска
-подстроки для различных текстовых данных.
+Figure \ref{fig:CSA_Lookup_diff_texts} shows comparative characteristics of substring lookup
+for different textual data.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=12cm]{lookup_diff_texts}
-    \caption{Поиск подстроки в CSA}
+    \caption{Substring lookup in CSA}
     \label{fig:CSA_Lookup_diff_texts}
 \end{figure}
 
-Рассмотрим относительное сжатие CSA по сравнению с suffix array. Рассчитывается среднее отношение памяти,
-затраченной для работы CSA, к памяти, затраченной suffix array в зависимости от длины исходного текста.
-На рисунке \ref{fig:CSA_compression_ratio_amazon} можно заметить уменьшение отношения, т.е. увеличение
-коэффициента сжатия. Примечательно, что для малых размеров исходного текста CSA занимает больше места,
-чем suffix array. Это объясняется наличием дополнительных структур данных, описанных на предыдущих страницах.
-При построении CSA они занимают место, сопоставимое по порядку с размером индекса в сжатом виде.
-Для больших текстов CSA становится более эффективным по сравнению с классическим suffix array.
+Let us consider relative compression of the CSA in respect to a suffix array.
+Mean ratio of memory used for CSA to memory used for suffix array is calculated
+depending on the size of the initial text. Figure \ref{fig:CSA_compression_ratio_amazon} shows
+a reduction of the ratio, that is compression coefficient increase.
+Remarkably, for small sizes of the initial text CSA takes more space than suffix array.
+It is explained by the usage of additional data structures descibed at the previous pages.
+At the CSA construction they consume memory comparable by the order to the index size
+in a compressed representation. For large texts CSA becomes more effective in comparison to
+classic suffix array.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=12cm]{compression_ratio_amazon}
-    \caption{Сжатие CSA по сравнению с SA}
+    \caption{Compression ratio of CSA to SA}
     \label{fig:CSA_compression_ratio_amazon}
 \end{figure}
 
-\clearpage
-Относительное сжатие CSA/SA для различных текстов показано на рисунке \ref{fig:CSA_compression_ratio_dif_texts}.
-Можно явным образом заметить зависимость размера сжатого индекса от мощности алфавита, чего нельзя
-сказать о suffix array и radix tree.
+Relative compression CSA/SA for different texts is shown at the figure \ref{fig:CSA_compression_ratio_dif_texts}.
+It is possible to explicitly notice the dependency between a compressed index size from the alphabet size,
+that can not be said about suffix array and radix tree.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=12cm]{compression_ratio_dif_texts}
-    \caption{Сжатие CSA по сравнению с SA}
+    \caption{Compression ratio of CSA to SA}
     \label{fig:CSA_compression_ratio_dif_texts}
 \end{figure}
