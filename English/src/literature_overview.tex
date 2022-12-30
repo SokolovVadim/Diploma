@@ -35,7 +35,8 @@ The same applies to different systems where \emph{pattern matching} is used \cit
 Another example of texts where it is difficult to apply traditional search method
 are several eastern languages.
 In these languages words are not separated by spaces that makes \emph{inverted index} difficult to use.
-Finally large texts combined from alphabet with a small amount of symbols can be attributed to <<inconvenient>> texts.
+Finally large texts combined from alphabet with a small amount of symbols
+can be attributed to <<inconvenient>> texts.
 A typical example of these texts is DNA and protein structure code.
 This text is not separated on words that is a key issue in using \emph{inverted index}.
 
@@ -136,10 +137,13 @@ A characteristic feature of all the compression algorithms of a compressed suffi
 that not the index itself is compressed but it's representation as a $\psi$-array.
 Auxiliary array can be obtained from suffix array by the following index manipulations.
 Let us consider a $\psi$-array construction by the example of a familiar string \textbf{mississippi\$}:
-\\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
-\\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1 \,\,\,\,2 \,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
+\\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,
+m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
+\\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1
+\,\,\,\,2 \,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
 \\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6 \,\,3 \,\,5 \,\,2
-\\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
+\\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7
+10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
 
 Let us call the largest suffix of a substring except for the initial string as a successor.
 Therefore, for substring issippi\$ successor is ssippi\$.
@@ -149,7 +153,8 @@ Thus, $\psi[7] = 6$. The main relation between a $\psi$-array and suffix array:
 \begin{equation}\label{sa:1}
 SA[i] = SA[\psi[i]] - 1
 \end{equation}
-It is necessary to emphasize that $\Psi[0] = \$$, because there is no successor for the first element in a suffix array.
+It is necessary to emphasize that $\Psi[0] = \$$, because there is no successor
+for the first element in a suffix array.
 However, $SA[5]$ is reffered to 0 index, that is the whole string overall.
 In other words, the element of suffix array is reffered to the beginning of the text,
 that is no other suffix can have it as a child.
@@ -161,7 +166,8 @@ There is an opportunity to reconstruct the initial suffix array by generated $\p
 with operations that are reversive to those that were present in the last paragraph.
 Let us have a better look at the specific features of this algorithm.
 
-First of all, it is necessary to find the index of the element of suffix array that has not been present in the $\psi$-array.
+First of all, it is necessary to find the index of the element of suffix array
+that has not been present in the $\psi$-array.
 In our example it is equal to 5. From the discussions above, it can be seen that $SA[5] = 0$.
 Thus, one element of an initial suffix array was reconstructed. From the formula \ref{sa:1} for $i = 5$ follows:
 
@@ -179,10 +185,14 @@ This approach goes beyond this paper, because the main problem of it is to find 
 \textbf{$\Psi$-array compression}
 
 Let us have a detailed look at $\psi$-array:
-\\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
-\\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1 \,\,\,\,2 \,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
-\\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6 \,\,3 \,\,5 \,\,2
-\\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4 \,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
+\\ \textbf{Text}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,
+m \,i \,\,\,\,s \,\,\,s \,\,\,\,i \,\,\,\,s \,\,\,s \,\,i \,\,p \,\,p \,\,i \,\,\,\,\$
+\\ \textbf{Offset}:\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\, 0 \,\,1 \,\,\,\,2
+\,\,3 \,\,\,4 \,\,\,5 \,\,6 \,7 \,\,8 \,\,9 \,10 11
+\\ \textbf{Suffix Array}:   11 10 \,7 \,\,4 \,\,\,1 \,\,\,0 \,\,9 \,8 \,\,6
+\,\,3 \,\,5 \,\,2
+\\ \textbf{$\Psi$ -array}: \,\,\,\,\,\,\,\,\,\,\,\,\$ \,\,\,0 \,\,\,\,7 10 \,\,11 4
+\,\,1 \,6 \,\,2 \,\,3 \,\,8 \,\,9
 
 Sorted suffix array looks like that:
 \\ (0) \,\,\,\$
@@ -205,7 +215,8 @@ $SA[2] = 7$, $T[7] = i$.
 $SA[3] = 4$, $T[4] = i$.
 
 It is noteworthy that $SA[6] = 9$, $T[9] = p$.
-Thus the alternation of the index from increase to decrease corresponds to the switch of symbols from \emph{i} to \emph{p}.
+Thus the alternation of the index from increase to decrease corresponds to
+the switch of symbols from \emph{i} to \emph{p}.
 
 \begin{theorem}
  \label{lemma:1}
