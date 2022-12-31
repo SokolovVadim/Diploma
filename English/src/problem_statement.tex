@@ -1,9 +1,9 @@
-First of all, compressed representation requires a number of manipulations over inital suffix array.
-Because of that there is a necessity to use intermediate $\psi$-array.
-This array implies reorganized suffix array that consists of several sets of ascending sequences of indexes.
+First of all, compressed representation requires several manipulations over the inital suffix array.
+Because of that, there is a necessity to use intermediate $\psi$-array.
+This array implies a reorganized suffix array that consists of several sets of ascending sequences of indexes.
 
-Ascending sequence of non-negative integers is compressible, that was shown in this paper \cite{pibiri2014dynamic}.
-In order to compress this sequence it is necessary to use Elias--Fano algorithm, that makes possible to
+Ascending sequence of non-negative integers is compressible, which was shown in this paper \cite{pibiri2014dynamic}.
+In order to compress this sequence it is necessary to use Elias--Fano algorithm, which makes it possible to
 write $\psi$-array in a bit vector representation.
 
 One of the characteristics of Elias--Fano representation is the opportunity to recover the values of $\psi$-array

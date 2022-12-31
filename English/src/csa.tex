@@ -25,16 +25,16 @@ type Csa struct {
 }
 \end{lstlisting}
 
-At the listing 4 before a simplified structure of CSA is shown. It consists of the initial text
-(only index is compressed, the text remains in the same condition), index, $\psi$-array and a text length.
-Index is build with a function that uses suffix array construction algorithm taken from Go library
+In listing 4 a simplified structure of CSA is shown. It consists of the initial text
+(only the index is compressed, the text remains in the same condition), index, $\psi$-array, and a text length.
+The index is build with a function that uses a suffix array construction algorithm taken from Go library
 \cite{golang2016sa}.
 
 \textbf{$\Psi$-array construction}
 
 In order to construct a $\psi$-array, it is necessary to assume that $\psi[0] = \$$. Then make
-a traversal over suffix array and find an index that corresponds to a value in suffix array that is
-equal to a current one with addition of 1. Listing 5 shows a pseudocode of the algorithm.
+a traversal over the suffix array and find an index that corresponds to a value in the suffix array that is
+equal to a current one with an addition of 1. Listing 5 shows a pseudocode of the algorithm.
 
 \begin{lstlisting}[caption=CSA construction]
 	func ConstructPsi() {
@@ -49,32 +49,32 @@ equal to a current one with addition of 1. Listing 5 shows a pseudocode of the a
 \textbf{Additional data structures}
 
 A bitmap from the Roaring.bitmap package \cite{chambi2016better} is used to store the data.
-This bitmap implementation is fast and effective. Also Roaring is used at many products such as
-Apache Druid, LinkedIn Pinot, Google Procella etc.
+This bitmap implementation is fast and effective. Also, Roaring is used for many products such as
+Apache Druid, LinkedIn Pinot, Google Procella, etc.
 
 Obtained $\psi$-array is a set of monotonically non-decreasing sequences of numbers.
-Elias-Fano algorithm allows one to transfer each of these sequences to a bitvector separately.
-The quantity of these sequences is equal to the size of alphabet used in a text \cite{andersensimple}.
-A question arises: how is it possible to organize the storage of these bitvectors?
+Elias-Fano algorithm allows one to transfer each of these sequences to a bit-vector separately.
+The quantity of these sequences is equal to the size of the alphabet used in a text \cite{andersensimple}.
+A question arises: how is it possible to organize the storage of these bit-vectors?
 
 One of the solutions is to use two additional arrays:
 the first one to store the offset in a $\psi$-array and the second one to store a symbol
 corresponding to the ascending sequence.
-In this paper text coding is represented by ASCII-code or a less size code.
-Thus the alphabet size is limited by 128 symbols. Therefore the size of additional arrays is not
+In this paper, text coding is represented by ASCII code or a less size code.
+Thus the alphabet size is limited to 128 symbols. Therefore the size of additional arrays is not
 greater than $2 \cdot m$, where $m$ is the size of the alphabet.
-An array with offsets is used for a fast indexing over an array of bitmaps.
+An array with offsets is used for fast indexing over an array of bitmaps.
 
-Additional data structures fulfillment and offsets calculation are performed during the compression
-of each separate monotonically non-decreasing sequnce of indices.
-To extract these sequences a peroperty described in Lemma \ref{lemma:1} is used,
+Additional data structures fulfillment and offset calculation are performed during the compression
+of each separate monotonically non-decreasing sequence of indices.
+To extract these sequences a notion described in Lemma \ref{lemma:1} is used,
 A termination in ascending of a $\psi$-array corresponds to a symbol switch.
-This way it is possible to index bitmaps and fulfill supporting array with symbols of the alphabet used.
+This way it is possible to index bitmaps and fulfill supporting arrays with symbols of the alphabet used.
 
 \textbf{Elias-Fano}
 
 Compression using Elias-Fano is performed for each separate sequence.
-At the same time a preliminary construction of upper and lower parts of bit representation
+At the same time, a preliminary construction of the upper and lower parts of the bit representation
 of the elements of this sequence is performed. The offset is calculated for the following
 fast access to lower bits. During the compression procedure, numbers are written in a bitmap,
 where it is possible to index over in a constant time.
@@ -86,15 +86,15 @@ was developed appoaching $select(i)$ in it.
 
 \textbf{Suffix array reconstuction}
 
-There is no necessity to completely decode a $\psi$-array to get the access to
+There is no necessity to completely decode a $\psi$-array to get access to
 an element of a suffix array $sa[i]$. There is a need for performing a traversal over $\psi$-array
 until the last element is not reached. Counting the number of steps until the last element $h(i)$,
-an index of a decired element can be found by a simple calculation: $sa[i] = n - h(i)$.
+an index of a desired element can be found by a simple calculation: $sa[i] = n - h(i)$.
 This algorithm takes $O(n)$ operations \cite{andersensimple}.
 
 \textbf{Final CSA structure}
 
-After adding supplementary data structures CSA looks as it is shown at the listing 6
+After adding supplementary data structures CSA looks as it is shown in the listing 6.
 
 \begin{lstlisting}[caption=CSA structure]
 type Csa struct {
@@ -108,8 +108,8 @@ type Csa struct {
 \end{lstlisting}
 
 It is necessary to emphasize that now there is no need to store indices and additional $\psi$-array.
-Instead of that the data is stored in a compressed way in a sequence of bit vectors.
-Apart from that the initial text is still stored in the same representation.
+Instead of that, the data is stored in a compressed way in a sequence of bit vectors.
+Apart from that, the initial text is still stored in the same representation.
 
 Thus to store compressed index it takes $n \cdot \log |\sigma| + o(n)$, where
 $|\sigma|$ is an alphabet size. Binary search over suffix array takes $O(\log n)$ operations.
@@ -118,8 +118,8 @@ In total $O(n\cdot \log n)$ operations are needed to find an element.
 
 \textbf{CSA testing}
 
-Let us consider the efficiency of CSA at the example of five texts with different contexts.
-To start, it is required to estimate array construction time and necessary memory storage size.
+Let us consider the efficiency of CSA in the example of five texts with different contexts.
+In the beginning, it is required to estimate array construction time and necessary memory storage size.
 Table \ref{table:6} shows data for Amazon Text Corpora.
 
 % csa_len = [879, 782, 684, 586, 498, 391, 293, 196, 98, 49, 10, 5, 2] # amazon
@@ -216,11 +216,11 @@ Table \ref{table:6} shows data for Amazon Text Corpora.
 \clearpage
 \newpage
 
-Let us consider the results of a dependency between a substring lookup speed and a text size for CSA,
-suffix array and radix tree constructed for Amazon Text Corpora. Figure \ref{fig:CSA_Lookup_time}
-shows that a substring lookup speed for a fixed size substring does not depend on the text size for
-suffix array and radix tree. Lookup time increases with increasing of the size of the initial text for CSA.
-Radix tree shows the best result as it was expected.
+Let us consider the results of a dependency between a substring lookup speed and text size for CSA,
+suffix array, and radix tree constructed for Amazon Text Corpora. Figure \ref{fig:CSA_Lookup_time}
+shows that a substring lookup speed for a fixed-size substring does not depend on the text size for
+the suffix array and radix tree. Lookup time increases with an increase in the size of the initial text for CSA.
+The radix tree shows the best result, as was expected.
 
 \begin{figure}[ht!]
 	\centering

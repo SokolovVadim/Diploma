@@ -3,22 +3,22 @@
 % CSA
 % Comparison
 
-Considered data structure, compressed suffix array (CSA) showed it's efficiency
+A considered data structure, the compressed suffix array (CSA) showed its efficiency
 in terms of memory used for index storage. In comparison to traditional
-suffix array as it was demonstrated at the graphs of comparable characteristics,
-with a large enough size of the initial text CSA consumes less memory than suffix array
+suffix array as it was demonstrated in the graphs of comparable characteristics,
+with a large enough size of the initial text, CSA consumes less memory than suffix array
 while preserving the opportunity to perform a substring lookup.
-As it was mentioned at the discussion of dependency between compression from the text lenght,
-at small initial text size suffix array is more effective in terms of memory consumption that
+As was mentioned in the discussion of dependency between compression and the text length,
+at a small initial text size suffix array is more effective in terms of memory consumption that
 is caused by additional costs for maintaining supplementary data structures used for succinct index construction.
-At the same time an algorithm of index construction as well as a substring lookup in CSA
-work slower than in the classic one. Nevertheless, there are several methods of the
-speed increase in these algorithms allowsing CSA to achieve results that are not worse
+At the same time, an algorithm of index construction, as well as a substring lookup in CSA,
+work slower than in the classic one. Nevertheless, there are several methods of 
+the speed increase in these algorithms allowing CSA to achieve results that are not worse
 than suffix array ones \cite{andersensimple}.
 
-The results obtained by the comparison of radix tree with other studied data structures
-confirm the efficiency of substring lookup in radix tree in constant time.
+The results obtained by the comparison of the radix tree with other studied data structures
+confirm the efficiency of substring lookup in the radix tree in constant time.
 However, text indexation requires fulfillment of the tree by substrings of the initial text,
 that takes significantly more memory than suffix array and CSA.
-Similarly, filling speed for a tree at the construction does not allow one to consider
+Similarly, the filling speed for a tree construction does not allow one to consider
 radix tree as an effective method for operations with substrings of the initial text.

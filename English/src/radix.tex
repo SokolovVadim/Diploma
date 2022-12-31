@@ -1,7 +1,7 @@
 Radix tree implementation in Go language is taken from the following source: \cite{golang2016sa}
-The main reason of this decision is caused by the simplisity of insertion of the benchmark
-in the existing testing system in Go language.
-From the algorithmic point of view this implementation confirms the theoretical description of
+The main reason for this decision is caused by the simplicity of insertion of the benchmark
+in the existing testing system in the Go language.
+From the algorithmic point of view, this implementation confirms the theoretical description of
 a substring search complexity that is $O(1)$.
 
 \newpage
@@ -17,7 +17,7 @@ func BenchmarkConstruct(b *testing.B, testStr string) {
 \end{lstlisting}
 
 Listing 2 briefly shows the radix tree construction function.
-In the beginning a set of substrings is generated from the text that is read from file.
+In the beginning, a set of substrings is generated from the text that is read from the file.
 In $fillRadixTree$ function substrings are added to the tree. Comparison of
 radix tree construction for Amazon Text Corpora \cite{amazon2013text} are shown in a table \ref{table:4}.
 
@@ -52,9 +52,9 @@ radix tree construction for Amazon Text Corpora \cite{amazon2013text} are shown 
     \label{table:4}
 \end{table}
 
-In the listing 3 below the example of a tree substring search function is given.
+In listing 3 below the example of a tree substring search function is given.
 This data structure shows quite good results of a substring search in a constant time.
-It can be seen at the table \ref{table:5}.
+It can be seen in the table \ref{table:5}.
 
 \newpage
 \begin{lstlisting}[caption=Radix tree lookup]

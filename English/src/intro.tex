@@ -6,51 +6,51 @@
 
 Text data processing is used in a wide range of tasks in the modern computer industry.
 Dealing with text data inverted index \cite{zobel2006inverted} is commonly used. This data structure
-allows to index words in documents.
-But there is a number of problems for which word indexing is not a good solution.
+allows one to index words in documents.
+But there are several problems for which word indexing is not a good solution.
 For example, in some bioinformatics problems \cite{tsuruoka2008facta} pattern search takes place
-in DNA-code or protein sequence structure, which are not words and therefore inverted index
+in DNA-code or protein sequence structure, which is not words and therefore inverted index
 can't be applied in this case.
-Similarly in some Eastern languages (Chinese, Arabic) text can not be devided in separated words.
-In addition, inverted index is limited when it comes to search for a string similar to required,
-but not totally identical to it. As an example, during the information search via search engines,
-where text with spelling mistakes is used as a request, inverted index can not give the right reply.
-In these cases indexes are built on unsorted suffixes of the initial text.
-The example of this index is a suffix array \cite{manber1993suffix}.
+Similarly, in some Eastern languages (Chinese, Arabic) text can not be divided in separated words.
+In addition, an inverted index is limited when it comes to searching for a string similar to the required
+one but not totally identical to it. As an example, during the information search via search engines,
+where text with spelling mistakes is used as a request, the inverted index can not give the right reply.
+In these cases, indexes are built on unsorted suffixes of the initial text.
+An example of this index is a suffix array \cite{manber1993suffix}.
 Substring search is implemented in a suffix array, which allows us to resolve the problems
-that cannot be solved by inverted index.
-In the contrary, suffix array can take 50 times more space than the initial text.
-Therefore it might be more cost-effective to execute simple text scaning in RAM 
-instead of having an index that does not fit in RAM,
+that cannot be solved by an inverted index.
+On the contrary, the suffix array can take 50 times more space than the initial text.
+Therefore it might be more cost-effective to execute simple text scanning in RAM 
+instead of having an index that does not fit in RAM
 because I/O operations in outer memory are significantly more cost-intensive.
 
 The increase in information search on the Internet leads to additional expenses in data storage and search.
-In this regard there is a necessity in research of different methods of reduction in consuming memory without 
+In this regard, there is a necessity to research different methods of reduction in consuming memory without 
 significant costs on data search.
 
-One of possible solutions for this type of problems is application
+One of the possible solutions for this type of problem is the application
 of succinct data structures \cite{jacobson1988succinct}.
-Depending on the level of information compression data structures can be divided by implicit, succinct and compact.
-Succinct data structures use the information volume that is close to theoretically minimal.
-In addition to that, in contrast to archives and other compressed solutions 
+Depending on the level of information compression, data structures can be divided into implicit, succinct, and compact.
+Succinct data structures use an information volume that is close to theoretically minimal.
+In addition to that, in contrast to archives and other compressed solutions, 
 it is possible to provide effective search operations.
-Let assume that it takes Z bit for storing a certain amount of data.
+Let us assume that it takes a Z bit for storing a certain amount of data.
 Succinct data structures take \(Z + o(Z)\) bit. 
-For example, data structure that takes \(Z + \ln(Z)\) bit of memory is succinct.
+For example, the data structure that takes \(Z + \ln(Z)\) bit of memory is succinct.
 
-Data is not always compressible. Apart from that not all the data is reasonable to compress
-in terms of efficiency of it in uncompressed state.
-This paper proposes to cosider compression of index of suffix array,
-built for different textual data. At the same time, text stays uncompressed.
+Data is not always compressible. Apart from that, not all the data is reasonable to compress
+in terms of its efficiency of it in an uncompressed state.
+This paper proposes to consider compression of the index of suffix array,
+built for different textual data. At the same time, the text stays uncompressed.
 
 In order to present the data in a compressed state it is necessary to prepare
 data in a special intermediate format.
-In this paper Elias-Fano encoding algorithm \cite{pibiri2014dynamic} is used.
+In this paper, Elias-Fano encoding algorithm \cite{pibiri2014dynamic} is used.
 This algorithm allows us to compress an ascending sequence of non-negative integers.
 
-While developing data structure of succinct suffix array memory optimization was used consisting in adding indexaton
-over a bitmap that makes possible to use less memory than similar approaches that use additional data structures.
+While developing the data structure of the succinct suffix array memory optimization was used consisting of adding indexation
+over a bitmap that makes it possible to use less memory than similar approaches that use additional data structures.
 
-The goal of this research is to study memory consumption for succinct suffix array over texts of various content
+The goal of this research is to study memory consumption for succinct suffix arrays over texts of various content
 and comparison with existing approaches.
 Substring search functions have been developed and the analysis of their efficiency has been carried out.

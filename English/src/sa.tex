@@ -4,7 +4,7 @@
 % measurements +
 % table +
 
-In order to analyze the data structure, suffix array from a standart Go library
+In order to analyze the data structure, a suffix array from a standard Go library
 was taken into consideration \cite{golang2016sa}. It takes as an input
 a text and constructs a sorted index from it with that it is possible to perform
 substring search operations. Index construction takes $O(n)$ operations, where $n$ is
@@ -26,8 +26,8 @@ func BenchmarkLookup(b *testing.B, testStr []byte) {
 \end{lstlisting}
 
 Listing 1 shows a simplified code of a benchmark for a substring search in a suffix array
-(less important for general understanding detailes are skipped). The code is tested for 5 texts with
-different contents. Substring size for data search is the same for each measurement.
+(less important for general understanding details are skipped). The code is tested for 5 texts with
+different contents. The substring size for data search is the same for each measurement.
 
 \begin{table}[ht!]
     \centering
