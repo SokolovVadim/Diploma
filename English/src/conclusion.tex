@@ -2,31 +2,30 @@
 % what have been proved
 % what are the further research topics to be covered
 
-На языке Go была разработана структура данных сжатый суффиксный массив (CSA), имеющая
-функционал традиционного suffix array, позволяющего решать задачи поиска по подстрокам.
-Реализован алгоритм Elias-Fano, позволяющий представлять индекс в сжатом виде.
-Построены сравнительные характеристики работы по построению и поиску подстроки
-для CSA и suffix array для текстов различного содержания.
-Изучена зависимость потребляемой памяти структурами данных от размеров исходного текста.
-Произведено сравнение radix tree с этими структурами по времени построения и поиска подстроки,
-а также по затраченной памяти.
+Using Go language data structure compressed suffix array (CSA) was implemented.
+It has a functionality of a traditional suffix array allowing one to solve
+problems of substring lookup. Elias-Fano algorithm was implemented allowing one
+to present an index in a succinct representation. Comparative characteristics of
+the work for construction and substring lookup for CSA and suffix array were combined
+for texts with different contexts.
+The dependency between memory consumed by data structures and the size of the initial text
+was studied. A comparison between the radix tree and these data structures was performed
+by construction time and substring lookup time as well as by memory consumed.
 
-С точки зрения потребляемой памяти CSA показал свою эффективность по сравнению с suffix array и radix tree,
-но разработанный алгоритм построения индекса и поиска подстроки является менее быстрым,
-чем аналогичные алгоритмы в традиционном suffix array. Рассмотрена применимость CSA на реальных
-прикладных задачах, в том числе поиск подстроки в белковой последовательности
-и pattern matching в ДНК-коде, используемые в биоинформатике.
-Показана эффективность поиска подстроки при помощи radix tree,
-подчеркнута сложность его использования для текстовых данных из-за больших
-затрат памяти при построении дерева.
+In terms of memory used, CSA showed its efficiency in comparison to suffix array and radix tree,
+but the algorithm of index construction and the substring lookup algorithm are less fast
+than similar algorithms in a traditional suffix array. Application of the CSA in real data
+was considered for applied problems such as substring lookup at a protein sequence and
+pattern matching at DNA code used in bioinformatics.
+The efficiency of substring search using the radix tree was demonstrated. The complexity
+of its application was shown for textual data because of the large data consumption at the tree construction step.
 
-Дальнейшие исследования в этой области могут опираться на разработку сжатых представлений существующих
-классических структур данных. Применение методов сжатия,
-таких как рассмотренный в этой работе алгоритм Elias-Fano, может позволить производить сжатое представление
-данных различного типа, предварительно преобразованных к нужному формату.
-На основании экспериментов выявлены достоинства и недостатки исследуемых алгоритмов и структур данных
-для работы над реальными прикладными задачами.
-Сжатые структуры данных могут быть задействованы в работе алгоритмов,
-использующих хранение индекса во внешней памяти. Эта тема является малоизученной, поэтому
-сжатие индекса представляет особый интерес в области индексирования по подстрокам во внешней памяти.
-
+Further studies in this research field can rely on the development of a succinct representation of
+existing classical data structures. Application of compression methods such as
+considered in this work Elias-Fano algorithm can make it possible to perform
+succinct representation of different data types converted to the right format beforehand.
+Based on the experiments advantages and disadvantages of studied algorithms and data structures
+functioning with real applied problems were identified.
+Succinct data structures can be used in algorithms utilizing index storage in outer memory.
+This topic is a little-studied one which is why index compression is of interest in
+the field of substring indexing in outer memory.

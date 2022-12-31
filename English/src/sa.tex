@@ -4,12 +4,13 @@
 % measurements +
 % table +
 
-Для анализа работы структуры данных взят suffix array из стандартной библиотеки языка Go. \cite{golang2016sa}
-Он принимает на вход текст и составляет из него отсортированный индекс, с помощью которого можно осуществлять
-операции поиска подстроки. Создание индекса занимает $O(n)$ операций, где $n$ -- размер исходного текста.
-Поиск подстроки занимает $O(\log n \cdot |s|)$, где $|s|$ -- это длина искомой подстроки.
-Рассмотрим подробнее бенчмарки. Исходный текст загружается из файла, затем выбирается подстрока,
-ограниченная позициями $[leftPos:rigtPos]$.
+In order to analyze the data structure, a suffix array from a standard Go library
+was taken into consideration \cite{golang2016sa}. It takes as an input
+a text and constructs a sorted index from it with that it is possible to perform
+substring search operations. Index construction takes $O(n)$ operations, where $n$ is
+the initial text size. Substring search takes $O(\log n \cdot |s|)$, where $|s|$ is the substring length.
+Let us consider benchmarks more carefully. The initial text is loaded from the file,
+then the substring is chosen that is limited by positions $[leftPos:rigtPos]$.
 
 \begin{lstlisting}[caption=Suffix array example]
 func BenchmarkLookup(b *testing.B, testStr []byte) {
@@ -24,15 +25,15 @@ func BenchmarkLookup(b *testing.B, testStr []byte) {
 }
 \end{lstlisting}
 
-На листинге 1 показан упрощенный код бенчмарка поиска подстроки для suffix array
-(маловажные для общего понимания детали опущены). Код протестирован для 5 текстов разного содержания.
-Размер подстроки для поиска данных является одинаковым для каждого измерения.
+Listing 1 shows a simplified code of a benchmark for a substring search in a suffix array
+(less important for general understanding details are skipped). The code is tested for 5 texts with
+different contents. The substring size for data search is the same for each measurement.
 
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Размер текста, KB & Память, KB & Время, s\\
+        Text size, KB & Memory, KB & Time, s\\
         \hline
         9766 & 58741 & 1.832\\
         \hline
@@ -65,24 +66,24 @@ func BenchmarkLookup(b *testing.B, testStr []byte) {
         2 & 194 & 0.256\\
         \hline
     \end{tabular}
-    \caption{Построение suffix array}
+    \caption{Suffix array construction}
     \label{table:2}
 \end{table}
 
-Т.к. размер suffix array не зависит от размера алфавита,
-результаты для разных текстов отличаются в пределах погрешности измерения,
-поэтому для наглядности достаточно привести пример для одного типа текста.
-В таблице \ref{table:2} показаны результаты измерений построения индекса для Amazon Text Corpora.
+Because suffix array size does not depend on the alphabet size
+the results for different texts vary within the margin of error.
+That is why it is enough to show for clarity an example for the same text type.
+Table \ref{table:2} shows the results of measurements of the index construction for the Amazon Text Corpora.
 
 % size, kb: 977, 879, 782, 684, 586, 489, 391, 293, 196, 98
 % time, mks: 12251, 11857, 12331, 12969, 12777, 12680, 11795, 11555, 11752, 11657
 % mem, kb:  6101, 5501, 4915, 4333, 3747, 3707, 3001, 2322, 1642, 962
 
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Размер текста, KB & Память, KB & Время, ms\\
+        Text size, KB & Memory, KB & Time, ms\\
         \hline
         977 & 6020 & 12.251\\
         \hline
@@ -105,6 +106,6 @@ func BenchmarkLookup(b *testing.B, testStr []byte) {
         98 & 881 & 11.657\\
         \hline
     \end{tabular}
-    \caption{Поиск подстроки в suffix array}
+    \caption{Substring search in suffix array}
     \label{table:3}
 \end{table}

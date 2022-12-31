@@ -10,11 +10,11 @@
 % search sa
 % complexity +
 
-Перейдем к описанию реализации CSA. Как было упомянуто в обзоре литературы, для начала необходимо
-построить индекс таким же способом, как это происходит в suffix array.
-Для этого требуется $O(n)$ операций \cite{huo2014practical}.
+Let us move on to the implementation of CSA. As it was mentioned in the literature overview,
+it is necessary to construct the index the same way as it was done for a suffix array.
+It takes $O(n)$ operations \cite{huo2014practical}.
 
-\textbf{Структура CSA}
+\textbf{CSA structure}
 
 \begin{lstlisting}[caption=CSA structure]
 type Csa struct {
@@ -25,77 +25,77 @@ type Csa struct {
 }
 \end{lstlisting}
 
-На приведенном выше листинге 4 обозначена упрощенная структура CSA. Она состоит из исходного текста
-(сжимается только индекс, текст остается в прежнем виде), индекса, $\psi$-массива и длины текста.
-Индекс строится с помощью функции, в которой за основу алгоритма взят алгоритм построения suffix array
-из библиотеки языка Go \cite{golang2016sa}.
+In listing 4 a simplified structure of CSA is shown. It consists of the initial text
+(only the index is compressed, the text remains in the same condition), index, $\psi$-array, and a text length.
+The index is build with a function that uses a suffix array construction algorithm taken from Go library
+\cite{golang2016sa}.
 
-\textbf{Построение $\psi$-массива}
+\textbf{$\Psi$-array construction}
 
-Для построения $\psi$-массива нужно принять $\psi[0] = \$$. Затем произвести итеративный обход
-suffix array и найти индекс, соответствующее значение которого в suffix array совпадает с текущим,
-увеличенным на единицу. В листинге 5 показан псевдокод алгоритма.
+In order to construct a $\psi$-array, it is necessary to assume that $\psi[0] = \$$. Then make
+a traversal over the suffix array and find an index that corresponds to a value in the suffix array that is
+equal to a current one with an addition of 1. Listing 5 shows a pseudocode of the algorithm.
 
-\begin{lstlisting}[caption=Построение CSA]
-func ConstructPsi() {
-	for i < len {
-		if sa[j] = sa[i] + 1 {
-			psi[i] = j
+\begin{lstlisting}[caption=CSA construction]
+	func ConstructPsi() {
+		for i < len {
+			if sa[j] = sa[i] + 1 {
+				psi[i] = j
+			}
 		}
 	}
-}
 \end{lstlisting}
 
-\textbf{Вспомогательные структуры данных}
+\textbf{Additional data structures}
 
-Для хранения данных используется битмап (bitmap) из пакета\\ Roaring.bitmap \cite{chambi2016better}.
-Это быстрая и эффективная реализация битмапа. Также Roaring используется во многих продуктах,
-таких как Apache Druid, LinkedIn Pinot, Google Procella и т.д.
+A bitmap from the Roaring.bitmap package \cite{chambi2016better} is used to store the data.
+This bitmap implementation is fast and effective. Also, Roaring is used for many products such as
+Apache Druid, LinkedIn Pinot, Google Procella, etc.
 
-Полученный $\psi$-массив представляет собой набор монотонно неубывающих последовательностей чисел.
-Алгоритм Elias-Fano позволяет преобразовывать каждую такую последовательность в битвектор в отдельности.
-Количество этих последовательностей совпадает с размером алфавита, используемого в тексте \cite{andersensimple}.
-Возникает вопрос, каким образом можно организовать хранение таких битвекторов.
+Obtained $\psi$-array is a set of monotonically non-decreasing sequences of numbers.
+Elias-Fano algorithm allows one to transfer each of these sequences to a bit-vector separately.
+The quantity of these sequences is equal to the size of the alphabet used in a text \cite{andersensimple}.
+A question arises: how is it possible to organize the storage of these bit-vectors?
 
-Одним из решений является использование двух дополнительных массивов:
-первый для хранения оступа в $\psi$-массиве, второй для хранения символа,
-соответствующего возрастающей последовательности.
-В этой работе кодировка текста представляет собой ASCII-код или код меньшего размера.
-Таким образом, размер алфавита ограничен 128 символами. Следовательно, размер
-дополнительных массивов не превышает $2 \cdot m$, где $m$ -- размер алфавита.
-Массив с оступами используется для быстрого индексирования по массиву битмапов.
+One of the solutions is to use two additional arrays:
+the first one to store the offset in a $\psi$-array and the second one to store a symbol
+corresponding to the ascending sequence.
+In this paper, text coding is represented by ASCII code or a less size code.
+Thus the alphabet size is limited to 128 symbols. Therefore the size of additional arrays is not
+greater than $2 \cdot m$, where $m$ is the size of the alphabet.
+An array with offsets is used for fast indexing over an array of bitmaps.
 
-Заполнение дополнительных структур данных и расчет отступов происходит при сжатии каждой отдельной
-монотонной неубывающей последовательности индексов.
-Для отделения таких последовательностей используется описанное ранее свойство из Леммы \ref{lemma:1}.
-Нарушение возрастания $\psi$-массива соответсвует смене символа. Таким образом можно идексировать
-битмапы и заполнить вспомогательный массив с символами используемого алфавита.
+Additional data structures fulfillment and offset calculation are performed during the compression
+of each separate monotonically non-decreasing sequence of indices.
+To extract these sequences a notion described in Lemma \ref{lemma:1} is used,
+A termination in ascending of a $\psi$-array corresponds to a symbol switch.
+This way it is possible to index bitmaps and fulfill supporting arrays with symbols of the alphabet used.
 
 \textbf{Elias-Fano}
 
-Сжатие при помощи алгоритма Elias-Fano осуществляется для каждой отдельной последовательности.
-При этом происходит предварительное построение верхней и нижней частей (младших и старших биты)
-битового представления чисел из этой последовательности. Рассчитывается отступ для дальнейшего
-быстрого доступа к младшим битам. В процессе сжатия числа записываются в битмап,
-в котором можно индексироваться за константное время.
+Compression using Elias-Fano is performed for each separate sequence.
+At the same time, a preliminary construction of the upper and lower parts of the bit representation
+of the elements of this sequence is performed. The offset is calculated for the following
+fast access to lower bits. During the compression procedure, numbers are written in a bitmap,
+where it is possible to index over in a constant time.
 
-Для того чтобы получить доступ к элементу последовательности (части $\psi$-массива),
-необходимо использовать функцию $select(i)$, реализованную в битмапе, работающую за $O(1)$.
-Для проверки корректности работы алгоритма реализована функция получения всего $\psi$-массива
-при помощи вызова $select(i)$.
+In order to get access to an element of the sequence (part of $\psi$-array), it is
+necessary to use the $select(i)$ function implemented in a bitmap, taking $O(1)$ time.
+To check the correctness of the algorithm a function of getting a whole $\psi$-array
+was developed appoaching $select(i)$ in it.
 
-\textbf{Восстановление suffix array}
+\textbf{Suffix array reconstuction}
 
-Для получения доступа к элементу suffix array $sa[i]$ нет необходимости полностью декодировать
-$\psi$-массив. Для этого требуется осуществить проход по $\psi$-массиву, пока не будет достигнут
-последний элемент. Сосчитав количество шагов до последнего элемента $h(i)$, найдем индекс искомого
-значения путем несложного вычисления: $sa[i] = n - h(i)$. Такой алгоритм требует $O(n)$ операций \cite{andersensimple}.
+There is no necessity to completely decode a $\psi$-array to get access to
+an element of a suffix array $sa[i]$. There is a need for performing a traversal over $\psi$-array
+until the last element is not reached. Counting the number of steps until the last element $h(i)$,
+an index of a desired element can be found by a simple calculation: $sa[i] = n - h(i)$.
+This algorithm takes $O(n)$ operations \cite{andersensimple}.
 
-\textbf{Окончательная структура CSA}
+\textbf{Final CSA structure}
 
-После добавления вспомогательных данных структура CSA принимает вид, показанный на листинге 6
+After adding supplementary data structures CSA looks as it is shown in the listing 6.
 
-\newpage
 \begin{lstlisting}[caption=CSA structure]
 type Csa struct {
 	text      string
@@ -107,32 +107,33 @@ type Csa struct {
 }
 \end{lstlisting}
 
-Важно подчеркнуть, что теперь нет необходимости хранить индексы и вспомогательный $\psi$-массив.
-Вместо этого данные хранятся в сжатом виде в последовательности битвекторов.
-Кроме того, исходный текст все так же остается в первоначальном виде.
+It is necessary to emphasize that now there is no need to store indices and additional $\psi$-array.
+Instead of that, the data is stored in a compressed way in a sequence of bit vectors.
+Apart from that, the initial text is still stored in the same representation.
 
-Таким образом, для хранения сжатого индекса требуется $n \cdot \log |\sigma| + o(n)$,
-где $|\sigma|$ -- размер алфавита. При двоичном поиске по suffix array необходимо произвести $O(\log n)$ операций.
-Для получения индекса в suffix array из $\psi$-массива требуется осуществить $O(n)$ операций.
-Суммарно для поиска элемента требуется $O(n\cdot \log n)$ операций.
+Thus to store compressed index it takes $n \cdot \log |\sigma| + o(n)$, where
+$|\sigma|$ is an alphabet size. Binary search over suffix array takes $O(\log n)$ operations.
+To get an index from a suffix array from a $\psi$-array it is necessary to perform $O(n)$ operations.
+In total $O(n\cdot \log n)$ operations are needed to find an element.
 
-\textbf{Тестирование CSA}
+\textbf{CSA testing}
 
-Рассмотрим эффективность работы CSA на примере пяти текстов различного содержания.
-Для начала оценим время построения массива и требуемое количество памяти для его хранения.
-В таблице \ref{table:6} указаны данные для Amazon Text Corpora.
+Let us consider the efficiency of CSA in the example of five texts with different contexts.
+In the beginning, it is required to estimate array construction time and necessary memory storage size.
+Table \ref{table:6} shows data for Amazon Text Corpora.
 
 % csa_len = [879, 782, 684, 586, 498, 391, 293, 196, 98, 49, 10, 5, 2] # amazon
-% csa_time = [392.040, 299.721, 225.818, 165.427, 114.660, 73.818, 41.825, 18.803, 4.981, 1.431, 0.313, 0.269, 0.256] # amazon
+% csa_time = [392.040, 299.721, 225.818, 165.427, 114.660, 73.818, 41.825, 18.803, 4.981,
+% 1.431, 0.313, 0.269, 0.256] # amazon
 % csa_mem = [2281, 2036, 1816, 1573, 1336, 1082, 817, 561, 309, 163, 45, 26, 17] # amazon
 
-\begin{table}[h!]
+\begin{table}[ht!]
 	\centering
 	\begin{tabular}{|c|c|c|}
 		\hline
 		\multicolumn{3}{|c|}{Amazon} \\
 		\hline
-		Размер текста, KB & Память, MB & Время, s\\
+		Text size, KB & Memory, MB & Time, s\\
 		\hline
 		879 & 2281 & 392.040\\
 		\hline
@@ -161,62 +162,18 @@ type Csa struct {
 		2 & 17 & 0.256\\
 		\hline
 	\end{tabular}
-	\caption{Построение CSA}
+	\caption{CSA construction}
 	\label{table:6}
 \end{table}
 
-% csa_len = [977, 879, 782, 684, 586, 489, 391, 293, 196, 98, 49, 10, 5, 2] # dna
-% csa_time = [491.614, 385.973, 309.387, 232.106, 168.735, 116.836, 73.656, 42.861, 18.788, 4.922, 1.446, 0.304, 0.267, 0.255] # dna
-
-%\begin{table}[h!]
-%	\centering
-%	\begin{tabular}{|c|c|c|}
-%		\hline
-%		\multicolumn{3}{|c|}{DNA} \\
-%		\hline
-%		Размер текста, KB & Память, MB & Время, s\\
-%		\hline
-%		977 & 2011 & 491.614\\
-%		\hline
-%		879 & 1782 & 285.973\\
-%		\hline
-%		782 & 1547 & 309.387\\
-%		\hline
-%		684 & 1396 & 232.106\\
-%		\hline
-%		586 & 1228 & 168.735\\
-%		\hline
-%		489 & 1077 & 116.836\\
-%		\hline
-%		391 & 845 & 73.656\\
-%		\hline
-%		293 & 627 & 42.861\\
-%		\hline
-%		196 & 436 & 18.788\\
-%		\hline
-%		98 & 241 & 4.922\\
-%		\hline
-%		49 & 124 & 1.446\\
-%		\hline
-%		10 & 34 & 0.304\\
-%		\hline
-%		5 & 23 & 0.267\\
-%		\hline
-%		2 & 16 & 0.255\\
-%		\hline
-%	\end{tabular}
-%	\caption{Построение CSA}
-%	\label{table:7}
-%\end{table}
-
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\includegraphics[width=12cm]{construct_time_amazon}
-	\caption{Построение CSA}
+	\caption{CSA construction}
 	\label{fig:CSA_construct_time_amazon}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
 		\centering
@@ -229,45 +186,45 @@ type Csa struct {
 		\centering
 		\includegraphics[width=\textwidth]{construct_time_Proteins}
 		\caption{Proteins}
-		\label{fig:three sin x}
+		\label{fig:three sin x proteins}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.49\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{construct_time_English}
 		\caption{English}
-		\label{fig:three sin x}
+		\label{fig:three sin x english}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.49\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{construct_time_Pitches}
 		\caption{Pitches}
-		\label{fig:three sin x}
+		\label{fig:three sin x pitches}
 	\end{subfigure}
-	\caption{Построение CSA}
+	\caption{CSA construction}
 	\label{fig:three graphs}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\includegraphics[width=12cm]{Lookup_time_csa_amazon}
-	\caption{Поиск подстроки в CSA}
+	\caption{Substring lookup in CSA}
 	\label{fig:CSA_Lookup_time_csa_amazon}
 \end{figure}
 
 \clearpage
 \newpage
-Рассмотрим результаты зависимость скорости поиска подстроки от размера текста для CSA,
-suffix array и radix tree, построенных для Amazon Text Corpora. На рисунке \ref{fig:CSA_Lookup_time}
-можно видеть, что скорость поиска подстроки фиксированного размера не зависит от размера текста
-для suffix array и radix tree. Для CSA время поиска увеличивается при увеличении размера исходного текста.
-Radix tree, как ожидалось, показывает лучший результат.
 
-\begin{figure}[h!]
+Let us consider the results of a dependency between a substring lookup speed and text size for CSA,
+suffix array, and radix tree constructed for Amazon Text Corpora. Figure \ref{fig:CSA_Lookup_time}
+shows that a substring lookup speed for a fixed-size substring does not depend on the text size for
+the suffix array and radix tree. Lookup time increases with an increase in the size of the initial text for CSA.
+The radix tree shows the best result, as was expected.
+
+\begin{figure}[ht!]
 	\centering
 	\includegraphics[width=12cm]{Lookup_time}
-	\caption{Поиск подстроки в CSA}
+	\caption{Substring lookup time in CSA}
 	\label{fig:CSA_Lookup_time}
 \end{figure}
-

@@ -1,12 +1,11 @@
-\documentclass[a4paper,oneside,final,12pt,russian]{article}
+\documentclass[a4paper,oneside,final,12pt]{article}
 \usepackage{cmap}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A,T1]{fontenc}
-\usepackage[russian]{babel}
+\usepackage[english]{babel}
 \newcommand{\comment}[1]{}
 \usepackage{graphicx}
 \usepackage{caption}
-%\usepackage{float}
 \usepackage{subcaption}
 \usepackage{amsthm}
 \usepackage{wrapfig}
@@ -15,15 +14,15 @@
 \usepackage{xcolor}
 \DeclareCaptionLabelFormat{gostfigure}{Figure #2}
 \captionsetup[table]{labelsep=endash,justification=justified,singlelinecheck=false,font=normalsize,skip=0pt}
-\captionsetup[figure]{labelformat=gostfigure,labelsep=endash,justification=centering,singlelinecheck=false,font=normalsize}
-%\usepackage{apacite}
+\captionsetup[figure]{labelformat=gostfigure,labelsep=endash,justification=centering,
+singlelinecheck=false,font=normalsize}
 \usepackage[pdftex,hidelinks,bookmarks=true]{hyperref}
 \usepackage{etoolbox}
 \usepackage{natbib}
 \usepackage{url}
 \newcounter{bibcount}
 \usepackage[nottoc]{tocbibind}
-\newtheorem{theorem}{Лемма}
+\newtheorem{theorem}{Lemma}
 \graphicspath{ {../images/} }
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
